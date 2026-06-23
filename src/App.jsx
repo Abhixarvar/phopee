@@ -3,29 +3,44 @@ import { Sun, Moon, ChevronRight, ChevronLeft, RotateCcw, X, ExternalLink, BarCh
 
 /* ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ PHONE DATABASE ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ */
 const PHONES = [
-  { id:1,  name:"iPhone 15 Pro Max", brand:"Apple",    price:159900, pStr:"₹1,59,900", os:"ios",     g:9.5, cam:9.8, bat:8.0, perf:9.8, storage:[256,512,1024], size:"large",    bio:"The pinnacle of iPhone — titanium build, A17 Pro chip, and a 5× periscope zoom.", pros:["A17 Pro chip","Titanium frame","5× periscope zoom","Action Button"] },
-  { id:2,  name:"iPhone 15 Pro",     brand:"Apple",    price:134900, pStr:"₹1,34,900", os:"ios",     g:9.5, cam:9.5, bat:7.8, perf:9.8, storage:[128,256,512,1024], size:"standard", bio:"Pro performance meets refined titanium design with blazing USB-C 3.0.", pros:["A17 Pro chip","USB-C 3.0","Triple camera","Titanium design"] },
-  { id:3,  name:"iPhone 15",         brand:"Apple",    price:79900,  pStr:"₹79,900",   os:"ios",     g:8.5, cam:8.8, bat:8.0, perf:9.0, storage:[128,256,512], size:"standard", bio:"The essential iPhone — Dynamic Island, USB-C and a breakthrough 48MP camera.", pros:["Dynamic Island","USB-C","48MP main camera","A16 Bionic"] },
-  { id:4,  name:"iPhone 14",         brand:"Apple",    price:69900,  pStr:"₹69,900",   os:"ios",     g:8.0, cam:8.5, bat:7.8, perf:8.5, storage:[128,256,512], size:"standard", bio:"Life-saving Emergency SOS via satellite and a brilliant dual-camera system.", pros:["A15 Bionic","Emergency SOS satellite","Crash Detection","Great camera"] },
-  { id:5,  name:"iPhone 13",         brand:"Apple",    price:59900,  pStr:"₹59,900",   os:"ios",     g:7.5, cam:8.0, bat:8.2, perf:8.0, storage:[128,256,512], size:"standard", bio:"Remarkable battery life and cinema-worthy video — a timeless Apple classic.", pros:["Long battery life","Cinematic mode","A15 Bionic","5G ready"] },
+  { id:1,  name:"iPhone 16 Pro Max", brand:"Apple",    price:144900, pStr:"₹1,44,900", os:"ios",     g:9.7, cam:9.9, bat:8.5, perf:9.9, storage:[256,512,1024], size:"large",    bio:"The ultimate iPhone with a massive 6.9-inch display, Camera Control, and A18 Pro chip.", pros:["A18 Pro chip","Camera Control","6.9-inch display","Apple Intelligence"] },
+  { id:2,  name:"iPhone 16 Pro",     brand:"Apple",    price:119900, pStr:"₹1,19,900", os:"ios",     g:9.7, cam:9.9, bat:8.2, perf:9.9, storage:[128,256,512,1024], size:"standard", bio:"Titanium design with a 6.3-inch display, 5x telephoto, and Camera Control.", pros:["A18 Pro chip","Camera Control","5x telephoto","Titanium design"] },
+  { id:3,  name:"iPhone 16",         brand:"Apple",    price:79900,  pStr:"₹79,900",   os:"ios",     g:8.8, cam:9.0, bat:8.2, perf:9.5, storage:[128,256,512], size:"standard", bio:"A massive leap with the A18 chip, Camera Control, and spatial capture.", pros:["Camera Control","A18 chip","Action Button","Apple Intelligence"] },
+  { id:4,  name:"iPhone 15",         brand:"Apple",    price:69900,  pStr:"₹69,900",   os:"ios",     g:8.5, cam:8.8, bat:8.0, perf:9.0, storage:[128,256,512], size:"standard", bio:"The essential iPhone — Dynamic Island, USB-C and a breakthrough 48MP camera.", pros:["Dynamic Island","USB-C","48MP main camera","A16 Bionic"] },
+  { id:5,  name:"Galaxy Z Fold 6",   brand:"Samsung",  price:164999, pStr:"₹1,64,999", os:"android", g:9.0, cam:8.8, bat:8.0, perf:9.7, storage:[256,512,1024], size:"large",    bio:"Thinner, lighter, and packed with Galaxy AI—the ultimate folding productivity powerhouse.", pros:["7.6-inch inner screen","Galaxy AI","Lighter design","Snapdragon 8 Gen 3"] },
   { id:6,  name:"Galaxy S24 Ultra",  brand:"Samsung",  price:129999, pStr:"₹1,29,999", os:"android", g:9.5, cam:9.8, bat:8.5, perf:9.7, storage:[256,512,1024], size:"large",    bio:"The ultimate Android — integrated S Pen, 200MP camera, and Galaxy AI.", pros:["S Pen included","200MP camera","Snapdragon 8 Gen 3","Galaxy AI"] },
-  { id:7,  name:"Galaxy S24+",       brand:"Samsung",  price:99999,  pStr:"₹99,999",   os:"android", g:9.0, cam:9.0, bat:8.8, perf:9.5, storage:[256,512], size:"large",    bio:"Flagship power and a massive battery backed by 7 years of software support.", pros:["4900mAh battery","Snapdragon 8 Gen 3","7-year updates","50MP camera"] },
-  { id:8,  name:"Galaxy S24",        brand:"Samsung",  price:79999,  pStr:"₹79,999",   os:"android", g:8.8, cam:8.8, bat:8.0, perf:9.3, storage:[128,256], size:"standard", bio:"Compact flagship with Galaxy AI and Snapdragon 8 Gen 3 in a titanium frame.", pros:["Compact flagship","Snapdragon 8 Gen 3","Galaxy AI","Titanium frame"] },
-  { id:9,  name:"Galaxy A54",        brand:"Samsung",  price:38999,  pStr:"₹38,999",   os:"android", g:7.0, cam:7.5, bat:8.5, perf:7.2, storage:[128,256], size:"standard", bio:"IP67-rated mid-ranger with 50MP triple camera and 4 years of OS updates.", pros:["50MP triple camera","5000mAh battery","IP67 rating","4-year updates"] },
-  { id:10, name:"Galaxy A34",        brand:"Samsung",  price:28999,  pStr:"₹28,999",   os:"android", g:6.5, cam:7.0, bat:8.8, perf:6.8, storage:[128,256], size:"large",    bio:"All-day battery and IP67 protection — a reliable everyday workhorse.", pros:["5000mAh battery","50MP camera","90Hz display","IP67"] },
+  { id:7,  name:"Galaxy S24+",       brand:"Samsung",  price:99999,  pStr:"₹99,999",   os:"android", g:9.0, cam:9.0, bat:8.8, perf:9.5, storage:[256,512], size:"large",    bio:"Flagship power and a massive battery backed by 7 years of software support.", pros:["4900mAh battery","Snapdragon 8 Gen 3","7-year updates","Galaxy AI"] },
+  { id:8,  name:"Galaxy S24",        brand:"Samsung",  price:74999,  pStr:"₹74,999",   os:"android", g:8.8, cam:8.8, bat:8.0, perf:9.3, storage:[128,256], size:"standard", bio:"Compact flagship with Galaxy AI and Snapdragon 8 Gen 3.", pros:["Compact flagship","Snapdragon 8 Gen 3","Galaxy AI","7-year updates"] },
+  { id:9,  name:"Pixel 9 Pro XL",    brand:"Google",   price:124999, pStr:"₹1,24,999", os:"android", g:8.5, cam:9.9, bat:8.8, perf:9.2, storage:[256,512], size:"large",    bio:"Google's best AI capabilities wrapped in a stunning new design with pro-level cameras.", pros:["Incredible AI camera","Gemini Advanced","7-year updates","New premium design"] },
+  { id:10, name:"Pixel 9",           brand:"Google",   price:79999,  pStr:"₹79,999",   os:"android", g:8.2, cam:9.5, bat:8.5, perf:9.0, storage:[128,256], size:"standard", bio:"The smartest Pixel yet, featuring Gemini AI and brilliant camera upgrades.", pros:["Tensor G4 chip","Best-in-class camera","Gemini AI","7-year updates"] },
   { id:11, name:"OnePlus 12",        brand:"OnePlus",  price:64999,  pStr:"₹64,999",   os:"android", g:9.3, cam:8.5, bat:9.5, perf:9.5, storage:[256,512], size:"large",    bio:"100W charging and Hasselblad cameras — never settle for slow charging again.", pros:["100W SuperVOOC","Hasselblad cameras","Snapdragon 8 Gen 3","5400mAh"] },
   { id:12, name:"OnePlus 12R",       brand:"OnePlus",  price:39999,  pStr:"₹39,999",   os:"android", g:8.5, cam:7.5, bat:9.2, perf:8.8, storage:[128,256], size:"large",    bio:"Flagship Snapdragon 8 Gen 2 with insane 100W charging at mid-range price.", pros:["100W charging","Snapdragon 8 Gen 2","5500mAh battery","120Hz AMOLED"] },
-  { id:13, name:"Pixel 8 Pro",       brand:"Google",   price:106999, pStr:"₹1,06,999", os:"android", g:8.0, cam:9.9, bat:8.5, perf:9.0, storage:[128,256,1024], size:"large",    bio:"The gold standard in AI-powered photography with 7-year update guarantee.", pros:["Best AI camera","7-year updates","Temperature sensor","Pro video"] },
-  { id:14, name:"Pixel 8",           brand:"Google",   price:75999,  pStr:"₹75,999",   os:"android", g:7.8, cam:9.5, bat:8.2, perf:8.8, storage:[128,256], size:"standard", bio:"Pure Android excellence with Tensor G3's outstanding photo processing.", pros:["Tensor G3 chip","50MP camera","Pure Android","Google AI"] },
-  { id:15, name:"Pixel 8a",          brand:"Google",   price:52999,  pStr:"₹52,999",   os:"android", g:7.5, cam:9.0, bat:8.0, perf:8.5, storage:[128,256], size:"standard", bio:"Pixel camera brilliance now available at a more accessible price point.", pros:["Tensor G3","64MP camera","5-year updates","Best AI features"] },
-  { id:16, name:"Xiaomi 14 Ultra",   brand:"Xiaomi",   price:99999,  pStr:"₹99,999",   os:"android", g:9.0, cam:9.9, bat:8.5, perf:9.7, storage:[256,512], size:"large",    bio:"Leica 1-inch sensor meets Snapdragon 8 Gen 3 — the ultimate camera phone.", pros:["Leica 1-inch sensor","Snapdragon 8 Gen 3","90W wireless","Pro Kit"] },
-  { id:17, name:"Xiaomi 14",         brand:"Xiaomi",   price:69999,  pStr:"₹69,999",   os:"android", g:9.0, cam:9.2, bat:8.8, perf:9.7, storage:[256,512], size:"standard", bio:"Compact powerhouse with Leica optics and 90W fast charging.", pros:["Leica cameras","Compact flagship","90W charging","Snapdragon 8 Gen 3"] },
-  { id:18, name:"iQOO 12",           brand:"iQOO",     price:52999,  pStr:"₹52,999",   os:"android", g:9.8, cam:8.0, bat:9.0, perf:9.7, storage:[256,512], size:"large",    bio:"Purpose-built for gaming — 144Hz LTPO, Snapdragon 8 Gen 3, 120W charging.", pros:["Best gaming phone","144Hz LTPO AMOLED","Snapdragon 8 Gen 3","120W charge"] },
-  { id:19, name:"Nothing Phone 2a",  brand:"Nothing",  price:23999,  pStr:"₹23,999",   os:"android", g:7.0, cam:7.5, bat:8.5, perf:7.5, storage:[128,256], size:"large",    bio:"Iconic Glyph lighting system with clean Nothing OS and Dimensity 7200 Pro.", pros:["Glyph Interface","Dimensity 7200 Pro","Clean Nothing OS","50MP camera"] },
-  { id:20, name:"Edge 50 Pro",       brand:"Motorola", price:31999,  pStr:"₹31,999",   os:"android", g:7.5, cam:8.5, bat:8.0, perf:8.0, storage:[256,512], size:"large",    bio:"Stunning curved pOLED and 125W TurboPower — fastest charging in class.", pros:["125W TurboPower","Curved pOLED","50MP ultra-wide","Moto AI"] },
-  { id:21, name:"GT 5 Pro",          brand:"Realme",   price:34999,  pStr:"₹34,999",   os:"android", g:9.0, cam:7.8, bat:8.5, perf:9.3, storage:[256,512], size:"large",    bio:"Snapdragon 8 Gen 3 and a 5600mAh battery at an unbeatable mid-range price.", pros:["Snapdragon 8 Gen 3","100W charging","5600mAh battery","144Hz AMOLED"] },
-  { id:22, name:"Poco X6 Pro",       brand:"Poco",     price:26999,  pStr:"₹26,999",   os:"android", g:8.8, cam:7.0, bat:8.0, perf:8.8, storage:[256,512], size:"large",    bio:"Undisputed king of performance-per-rupee — Dimensity 8300 Ultra at ₹26,999.", pros:["Dimensity 8300 Ultra","120W charging","144Hz display","Best value"] },
+  { id:13, name:"Xiaomi 14 Ultra",   brand:"Xiaomi",   price:99999,  pStr:"₹99,999",   os:"android", g:9.0, cam:9.9, bat:8.5, perf:9.7, storage:[256,512], size:"large",    bio:"Leica 1-inch sensor meets Snapdragon 8 Gen 3 — the ultimate camera phone.", pros:["Leica 1-inch sensor","Snapdragon 8 Gen 3","90W wireless","Pro Kit"] },
+  { id:14, name:"Xiaomi 14",         brand:"Xiaomi",   price:69999,  pStr:"₹69,999",   os:"android", g:9.0, cam:9.2, bat:8.8, perf:9.7, storage:[256,512], size:"standard", bio:"Compact powerhouse with Leica optics and 90W fast charging.", pros:["Leica cameras","Compact flagship","90W charging","Snapdragon 8 Gen 3"] },
+  { id:15, name:"iQOO 12",           brand:"iQOO",     price:52999,  pStr:"₹52,999",   os:"android", g:9.8, cam:8.0, bat:9.0, perf:9.7, storage:[256,512], size:"large",    bio:"Purpose-built for gaming — 144Hz LTPO, Snapdragon 8 Gen 3, 120W charging.", pros:["Best gaming phone","144Hz LTPO AMOLED","Snapdragon 8 Gen 3","120W charge"] },
+  { id:16, name:"Nothing Phone (2a)",brand:"Nothing",  price:23999,  pStr:"₹23,999",   os:"android", g:7.0, cam:7.5, bat:8.5, perf:7.5, storage:[128,256], size:"large",    bio:"Iconic Glyph lighting system with clean Nothing OS and Dimensity 7200 Pro.", pros:["Glyph Interface","Dimensity 7200 Pro","Clean Nothing OS","50MP camera"] },
+  { id:17, name:"Edge 50 Pro",       brand:"Motorola", price:31999,  pStr:"₹31,999",   os:"android", g:7.5, cam:8.5, bat:8.0, perf:8.0, storage:[256,512], size:"large",    bio:"Stunning curved pOLED and 125W TurboPower — fastest charging in class.", pros:["125W TurboPower","Curved pOLED","50MP ultra-wide","Moto AI"] },
+  { id:18, name:"GT 6T",             brand:"Realme",   price:30999,  pStr:"₹30,999",   os:"android", g:8.8, cam:7.5, bat:8.5, perf:9.0, storage:[128,256,512], size:"large",bio:"Snapdragon 7+ Gen 3 powerhouse with 6000nit peak brightness.", pros:["Snapdragon 7+ Gen 3","120W charging","Brightest display","Great performance"] },
+  { id:19, name:"Poco X6 Pro",       brand:"Poco",     price:25999,  pStr:"₹25,999",   os:"android", g:8.8, cam:7.0, bat:8.0, perf:8.8, storage:[256,512], size:"large",    bio:"Undisputed king of performance-per-rupee — Dimensity 8300 Ultra.", pros:["Dimensity 8300 Ultra","67W charging","120Hz display","Best value gaming"] },
+  { id:20, name:"Galaxy A55",        brand:"Samsung",  price:39999,  pStr:"₹39,999",   os:"android", g:7.2, cam:7.8, bat:8.5, perf:7.5, storage:[128,256], size:"large",    bio:"Premium metal frame, reliable cameras, and 4 years of OS updates.", pros:["Premium build","5000mAh battery","Knox security","4-year updates"] },
 ];
+
+/* ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ UPCOMING PHONES ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ */
+const UPCOMING_PHONES = [
+  { id: 101, name: "Galaxy S25 Ultra", brand: "Samsung", expected: "Early 2025", desc: "Snapdragon 8 Elite, advanced Galaxy AI, and a refined titanium frame." },
+  { id: 102, name: "iPhone 17 Pro", brand: "Apple", expected: "Sep 2025", desc: "Rumored slimmer profile, A19 Pro chip, and significant thermal improvements." },
+  { id: 103, name: "Pixel 10 Pro", brand: "Google", expected: "Oct 2025", desc: "First Pixel with a fully custom-designed Tensor chip manufactured by TSMC." },
+  { id: 104, name: "OnePlus 13", brand: "OnePlus", expected: "Jan 2025", desc: "Snapdragon 8 Elite, massive 6000mAh battery, and ultrasonic fingerprint sensor." }
+];
+
+/* ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ BRAND LOGOS ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ */
+const ICONS = {
+  apple: <svg width="22" height="22" viewBox="0 0 24 24" fill="currentColor"><path d="M16.5,14.4c0,3.2,2.8,4.2,2.9,4.3c-0.2,0.7-1,3.4-3,6.2c-1.7,2.5-3.5,4.9-6.3,5c-2.7,0.1-3.6-1.6-6.6-1.6 c-3,0-4.1,1.6-6.6,1.7C-6,30.1-8,27.4-9.9,24.7c-4-5.8-7.1-16.4-3-23.5C-10.8-2.2-7.5-5.2-4-5.3c2.7-0.1,5.3,1.8,7.1,1.8 c1.8,0,4.9-2.2,8-1.8C14.5-4.8,17.2-3.3,19-0.8c-1.5,1-4.4,2.6-4.3,6.1C14.7,9.3,18,10.6,18.1,10.7C17.9,11.3,17.2,13.2,16.5,14.4z M10.4-6.3C11.9-8.1,12.9-10.6,12.6-13c-2.2,0.1-4.8,1.5-6.4,3.3C4.9-8,3.7-5.5,4.1-3C6.4-2.8,8.8-4.3,10.4-6.3z" transform="translate(10, 14) scale(0.6)"/></svg>,
+  android: <svg width="22" height="22" viewBox="0 0 24 24" fill="currentColor"><path d="M17.5 14.8c-.8 0-1.4-.6-1.4-1.4s.6-1.4 1.4-1.4 1.4.6 1.4 1.4-.6 1.4-1.4 1.4zm-11 0c-.8 0-1.4-.6-1.4-1.4s.6-1.4 1.4-1.4 1.4.6 1.4 1.4-.6 1.4-1.4 1.4zm10.7-5.5l1.8-3.1c.1-.2 0-.5-.2-.6-.2-.1-.5 0-.6.2l-1.9 3.2C14.9 8.2 13.5 8 12 8s-2.9.2-4.3.9l-1.9-3.2c-.1-.2-.4-.3-.6-.2-.2.1-.3.4-.2.6l1.8 3.1C3.6 10.9 1 14.6 1 19h22c0-4.4-2.6-8.1-5.8-9.7z"/></svg>,
+  samsung: <span style={{fontWeight:800,fontSize:14,letterSpacing:"-0.5px",fontFamily:"Arial",textTransform:"uppercase"}}>SAMSUNG</span>,
+  google: <svg width="22" height="22" viewBox="0 0 24 24"><path d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z" fill="#4285F4"/><path d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z" fill="#34A853"/><path d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.93l2.85-2.22.81-.62z" fill="#FBBC05"/><path d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z" fill="#EA4335"/></svg>,
+  oneplus: <svg width="22" height="22" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm1 14h-2v-4H7v-2h4V6h2v4h4v2h-4v4zm-1-7c-1.66 0-3-1.34-3-3s1.34-3 3-3 3 1.34 3 3-1.34 3-3 3z"/></svg>,
+};
 
 const GR = {
   Apple:    ["#2c2c2e","#3d3d3f"], Samsung: ["#1428A0","#0b6ef5"],
@@ -40,7 +55,7 @@ const QUESTIONS = [
   { id:"budget", title:"What's your budget?", sub:"We'll find phones that give the best value for your spend.", type:"choice",
     opts:[{v:"b1",label:"Under ₹20,000",s:"Budget essentials",e:"💰"},{v:"b2",label:"₹20K – ₹40K",s:"Mid-range sweet spot",e:"💳"},{v:"b3",label:"₹40K – ₹70K",s:"Upper mid-range",e:"🎯"},{v:"b4",label:"₹70K – ₹1,00,000",s:"Premium segment",e:"✨"},{v:"b5",label:"Above ₹1,00,000",s:"True flagship",e:"👑"}] },
   { id:"os", title:"iOS or Android?", sub:"Your ecosystem preference shapes every recommendation.", type:"choice",
-    opts:[{v:"ios",label:"iPhone (iOS)",s:"Apple ecosystem",e:"🍎"},{v:"android",label:"Android",s:"Open & customisable",e:"🤖"},{v:"any",label:"No Preference",s:"Just give me the best",e:"⚡"}] },
+    opts:[{v:"ios",label:"iPhone (iOS)",s:"Apple ecosystem",e:ICONS.apple},{v:"android",label:"Android",s:"Open & customisable",e:ICONS.android},{v:"any",label:"No Preference",s:"Just give me the best",e:"⚡"}] },
   { id:"usage", title:"How do you mainly use your phone?", sub:"We'll weight the features that matter most to you.", type:"choice",
     opts:[{v:"gaming",label:"Gaming",s:"Performance & display",e:"🎮"},{v:"camera",label:"Photography",s:"Best camera quality",e:"📷"},{v:"social",label:"Social Media",s:"Camera speed & beauty",e:"📱"},{v:"business",label:"Business",s:"Productivity & reliability",e:"💼"},{v:"content",label:"Content Creation",s:"Video & creative tools",e:"🎬"},{v:"battery",label:"Battery Life",s:"All-day & beyond",e:"🔋"},{v:"general",label:"General Use",s:"Balanced & versatile",e:"🌟"}] },
   { id:"screenSize", title:"Screen size preference?", sub:"Find the form factor that fits your hand.", type:"choice",
@@ -54,7 +69,7 @@ const QUESTIONS = [
   { id:"storage", title:"How much storage do you need?", sub:"More storage = more photos, apps, and offline media.", type:"choice",
     opts:[{v:"128",label:"128 GB",s:"Light user · Stream everything",e:"📂"},{v:"256",label:"256 GB",s:"Most users · Sweet spot",e:"💾"},{v:"512",label:"512 GB",s:"Power user · No compromise",e:"🗄️"},{v:"1024",label:"1 TB",s:"Heavy user · Ultimate freedom",e:"🏦"}] },
   { id:"brand", title:"Any brand preference?", sub:"We'll give your preferred brand extra consideration.", type:"choice",
-    opts:[{v:"Apple",label:"Apple",s:"iPhones only",e:"🍎"},{v:"Samsung",label:"Samsung",s:"Galaxy series",e:"🌌"},{v:"OnePlus",label:"OnePlus",s:"Never Settle",e:"🔴"},{v:"Google",label:"Google",s:"Pure Android",e:"🔍"},{v:"any",label:"Any Brand",s:"Best overall pick wins",e:"🏆"}] },
+    opts:[{v:"Apple",label:"Apple",s:"iPhones only",e:ICONS.apple},{v:"Samsung",label:"Samsung",s:"Galaxy series",e:ICONS.samsung},{v:"OnePlus",label:"OnePlus",s:"Never Settle",e:ICONS.oneplus},{v:"Google",label:"Google",s:"Pure Android",e:ICONS.google},{v:"any",label:"Any Brand",s:"Best overall pick wins",e:"🏆"}] },
   { id:"condition", title:"New or refurbished?", sub:"Certified refurbished phones offer big savings on tested quality.", type:"choice",
     opts:[{v:"new",label:"Brand New",s:"Full warranty & fresh",e:"🎁"},{v:"refurb",label:"Refurbished",s:"Save up to 30%",e:"♻️"},{v:"either",label:"Either is fine",s:"Best deal wins",e:"🤝"}] },
 ];
@@ -123,37 +138,41 @@ const CSS = `
   @keyframes float1{0%,100%{transform:translateY(0) rotate(-4deg)}50%{transform:translateY(-16px) rotate(3deg)}}
   @keyframes float2{0%,100%{transform:translateY(-6px) rotate(7deg)}50%{transform:translateY(10px) rotate(-1deg)}}
   @keyframes float3{0%,100%{transform:translateY(4px) rotate(-2deg)}50%{transform:translateY(-14px) rotate(8deg)}}
-  @keyframes spin{to{stroke-dashoffset:0}}
   @keyframes dotPulse{0%,100%{transform:scale(.7);opacity:.4}50%{transform:scale(1);opacity:1}}
-  .au{animation:fadeUp .55s ease both}
-  .ai{animation:fadeIn .4s ease both}
-  .as{animation:scaleIn .42s ease both}
-  .ar{animation:slideR .44s ease both}
-  .al{animation:slideL .44s ease both}
+  
+  :root { --ease-spring: cubic-bezier(0.175, 0.885, 0.32, 1.15); --ease-out: cubic-bezier(0.25, 0.8, 0.25, 1); }
+  
+  .au{animation:fadeUp .6s var(--ease-spring) both}
+  .ai{animation:fadeIn .5s var(--ease-out) both}
+  .as{animation:scaleIn .5s var(--ease-spring) both}
+  .ar{animation:slideR .5s var(--ease-spring) both}
+  .al{animation:slideL .5s var(--ease-spring) both}
   .f1{animation:float1 5s ease-in-out infinite}
   .f2{animation:float2 6s ease-in-out infinite}
   .f3{animation:float3 4.5s ease-in-out infinite}
   .d1{animation-delay:.07s}.d2{animation-delay:.14s}.d3{animation-delay:.21s}
   .d4{animation-delay:.28s}.d5{animation-delay:.36s}.d6{animation-delay:.44s}.d7{animation-delay:.52s}
-  .opt{transition:all .18s ease;cursor:pointer;-webkit-tap-highlight-color:transparent;user-select:none}
-  .opt:hover{transform:translateY(-2px)}
-  .opt:active{transform:scale(.97)}
-  .cta{transition:all .2s ease;cursor:pointer;user-select:none}
-  .cta:hover{transform:scale(1.03)}
-  .cta:active{transform:scale(.97)}
-  .bbtn{transition:all .15s ease;cursor:pointer;text-decoration:none}
-  .bbtn:hover{opacity:.82;transform:translateY(-1px)}
+  
+  .opt{transition:all .25s var(--ease-spring);cursor:pointer;-webkit-tap-highlight-color:transparent;user-select:none}
+  .opt:hover{transform:translateY(-3px) scale(1.02);box-shadow:0 10px 20px rgba(0,0,0,.08)}
+  .opt:active{transform:scale(.97) translateY(0)}
+  .cta{transition:all .25s var(--ease-spring);cursor:pointer;user-select:none}
+  .cta:hover{transform:scale(1.04) translateY(-2px)}
+  .cta:active{transform:scale(.96) translateY(0)}
+  .bbtn{transition:all .2s ease;cursor:pointer;text-decoration:none}
+  .bbtn:hover{opacity:.85;transform:translateY(-2px)}
   .bbtn:active{transform:scale(.96)}
-  .nbtn{transition:opacity .15s ease;cursor:pointer}
-  .nbtn:hover{opacity:.7}
-  .nbtn:active{transform:scale(.96)}
-  .sbar{transition:width 1.1s ease .2s}
+  .nbtn{transition:all .2s ease;cursor:pointer}
+  .nbtn:hover{opacity:.7;transform:scale(1.05)}
+  .nbtn:active{transform:scale(.95)}
+  .sbar{transition:width 1.2s cubic-bezier(0.22, 1, 0.36, 1) .2s}
   .dot1{animation:dotPulse .8s ease-in-out 0s infinite}
   .dot2{animation:dotPulse .8s ease-in-out .2s infinite}
   .dot3{animation:dotPulse .8s ease-in-out .4s infinite}
-  ::-webkit-scrollbar{width:5px}
+  ::-webkit-scrollbar{width:6px}
   ::-webkit-scrollbar-track{background:transparent}
-  ::-webkit-scrollbar-thumb{background:rgba(128,128,128,.3);border-radius:3px}
+  ::-webkit-scrollbar-thumb{background:rgba(128,128,128,.3);border-radius:4px}
+  ::-webkit-scrollbar-thumb:hover{background:rgba(128,128,128,.5)}
 `;
 
 /* ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ COMPONENTS ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ */
@@ -231,7 +250,7 @@ function OptionCard({ opt, selected, onSelect, dark }) {
   const sb=dark?"rgba(255,255,255,.42)":"rgba(0,0,0,.42)";
   return (
     <div className="opt" onClick={()=>onSelect(opt.v)} style={{background:bg,border:`1.5px solid ${br}`,borderRadius:14,padding:"13px 15px",display:"flex",alignItems:"center",gap:11}}>
-      <span style={{fontSize:21,flexShrink:0,lineHeight:1}}>{opt.e}</span>
+      <span style={{fontSize:21,flexShrink:0,lineHeight:1,display:"flex",alignItems:"center",justifyContent:"center",width:24,height:24}}>{opt.e}</span>
       <div style={{flex:1,minWidth:0}}>
         <div style={{fontSize:14,fontWeight:700,color:tx,letterSpacing:"-0.2px"}}>{opt.label}</div>
         <div style={{fontSize:12,color:sb,marginTop:1}}>{opt.s}</div>
@@ -275,8 +294,9 @@ function HomePage({ onStart, dark }) {
   const tx=dark?"#f5f5f7":"#1d1d1f";
   const sb=dark?"rgba(245,245,247,.6)":"rgba(29,29,31,.6)";
   return (
-    <div style={{minHeight:"100vh",background:bg,display:"flex",alignItems:"center",justifyContent:"center",paddingTop:52}}>
-      <div style={{maxWidth:1060,width:"100%",padding:"48px 24px",display:"flex",alignItems:"center",gap:64,flexWrap:"wrap",justifyContent:"center"}}>
+    <div style={{minHeight:"100vh",background:bg,display:"flex",flexDirection:"column",alignItems:"center",paddingTop:52}}>
+      <div style={{flex:1,display:"flex",alignItems:"center",width:"100%"}}>
+        <div style={{maxWidth:1060,width:"100%",margin:"0 auto",padding:"48px 24px",display:"flex",alignItems:"center",gap:64,flexWrap:"wrap",justifyContent:"center"}}>
         {/* Text */}
         <div style={{flex:"1 1 320px",maxWidth:520}}>
           <div className="au" style={{display:"inline-flex",alignItems:"center",gap:6,background:dark?"rgba(0,113,227,.18)":"rgba(0,113,227,.07)",border:`1px solid ${dark?"rgba(0,113,227,.38)":"rgba(0,113,227,.18)"}`,borderRadius:20,padding:"5px 13px",marginBottom:22}}>
@@ -308,6 +328,23 @@ function HomePage({ onStart, dark }) {
           <div style={{position:"absolute",top:20,right:0,opacity:.55}}><PhoneMockup colors={GR.Google} anim="f3" scale={.78}/></div>
           <div style={{position:"relative",zIndex:2}}><PhoneMockup colors={GR.Apple} anim="f1" scale={1.05}/></div>
           <div style={{position:"absolute",bottom:10,left:"30%",opacity:.4}}><PhoneMockup colors={GR.OnePlus} anim="f2" scale={.6}/></div>
+        </div>
+      </div>
+      </div>
+
+      {/* Upcoming Phones Section */}
+      <div style={{maxWidth:1060,width:"100%",padding:"20px 24px 60px"}}>
+        <h2 className="au" style={{fontSize:22,fontWeight:800,color:tx,marginBottom:20,letterSpacing:"-0.5px"}}>On The Horizon: Upcoming Phones</h2>
+        <div className="au d1" style={{display:"grid",gridTemplateColumns:"repeat(auto-fit,minmax(240px,1fr))",gap:16}}>
+          {UPCOMING_PHONES.map(up => (
+            <div key={up.id} className="opt" style={{background:dark?"rgba(255,255,255,.03)":"rgba(0,0,0,.02)",border:`1px solid ${dark?"rgba(255,255,255,.08)":"rgba(0,0,0,.06)"}`,borderRadius:16,padding:"18px"}}>
+              <div style={{display:"flex",justifyContent:"space-between",alignItems:"flex-start",marginBottom:8}}>
+                <div style={{fontSize:15,fontWeight:800,color:tx,letterSpacing:"-0.2px"}}>{up.name}</div>
+                <div style={{fontSize:11,fontWeight:700,color:"#0071e3",background:dark?"rgba(0,113,227,.15)":"rgba(0,113,227,.08)",padding:"3px 8px",borderRadius:12}}>{up.expected}</div>
+              </div>
+              <div style={{fontSize:13,color:sb,lineHeight:1.5}}>{up.desc}</div>
+            </div>
+          ))}
         </div>
       </div>
     </div>
