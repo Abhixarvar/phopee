@@ -3,6 +3,9 @@ import { Sun, Moon, ChevronRight, ChevronLeft, RotateCcw, X, ExternalLink, BarCh
 
 /* ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ PHONE DATABASE ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ */
 const PHONES = [
+  { id:21, name:"iPhone 17 Pro Max", brand:"Apple",    price:149900, pStr:"₹1,49,900", os:"ios",     g:9.8, cam:9.9, bat:9.0, perf:9.9, storage:[256,512,1024], size:"large",    bio:"Incredible A19 Pro chip, pro-grade cameras, and refined design with Apple Intelligence.", pros:["A19 Pro chip","Apple Intelligence","Incredible battery","Titanium design"] },
+  { id:22, name:"Galaxy S26 Ultra",  brand:"Samsung",  price:139999, pStr:"₹1,39,999", os:"android", g:9.7, cam:9.9, bat:8.8, perf:9.9, storage:[256,512,1024], size:"large",    bio:"The pinnacle of Android in 2026 — advanced AI, 200MP refined camera, and 7 years of support.", pros:["Ultimate Galaxy AI","200MP camera","Snapdragon 8 Gen 4","Integrated S Pen"] },
+  { id:23, name:"Pixel 10 Pro XL",   brand:"Google",   price:124999, pStr:"₹1,24,999", os:"android", g:8.8, cam:9.9, bat:8.5, perf:9.5, storage:[256,512], size:"large",    bio:"First fully custom TSMC Tensor chip, unmatched AI capabilities, and incredible cameras.", pros:["Tensor G5 chip","Gemini Advanced","Best-in-class camera","7-year updates"] },
   { id:1,  name:"iPhone 16 Pro Max", brand:"Apple",    price:144900, pStr:"₹1,44,900", os:"ios",     g:9.7, cam:9.9, bat:8.5, perf:9.9, storage:[256,512,1024], size:"large",    bio:"The ultimate iPhone with a massive 6.9-inch display, Camera Control, and A18 Pro chip.", pros:["A18 Pro chip","Camera Control","6.9-inch display","Apple Intelligence"] },
   { id:2,  name:"iPhone 16 Pro",     brand:"Apple",    price:119900, pStr:"₹1,19,900", os:"ios",     g:9.7, cam:9.9, bat:8.2, perf:9.9, storage:[128,256,512,1024], size:"standard", bio:"Titanium design with a 6.3-inch display, 5x telephoto, and Camera Control.", pros:["A18 Pro chip","Camera Control","5x telephoto","Titanium design"] },
   { id:3,  name:"iPhone 16",         brand:"Apple",    price:79900,  pStr:"₹79,900",   os:"ios",     g:8.8, cam:9.0, bat:8.2, perf:9.5, storage:[128,256,512], size:"standard", bio:"A massive leap with the A18 chip, Camera Control, and spatial capture.", pros:["Camera Control","A18 chip","Action Button","Apple Intelligence"] },
@@ -27,10 +30,10 @@ const PHONES = [
 
 /* ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ UPCOMING PHONES ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ */
 const UPCOMING_PHONES = [
-  { id: 101, name: "Galaxy S25 Ultra", brand: "Samsung", expected: "Early 2025", desc: "Snapdragon 8 Elite, advanced Galaxy AI, and a refined titanium frame." },
-  { id: 102, name: "iPhone 17 Pro", brand: "Apple", expected: "Sep 2025", desc: "Rumored slimmer profile, A19 Pro chip, and significant thermal improvements." },
-  { id: 103, name: "Pixel 10 Pro", brand: "Google", expected: "Oct 2025", desc: "First Pixel with a fully custom-designed Tensor chip manufactured by TSMC." },
-  { id: 104, name: "OnePlus 13", brand: "OnePlus", expected: "Jan 2025", desc: "Snapdragon 8 Elite, massive 6000mAh battery, and ultrasonic fingerprint sensor." }
+  { id: 101, name: "iPhone 18 Pro", brand: "Apple", expected: "Sep 2026", desc: "Next-gen A20 chip, huge AI upgrades, and advanced thermal management." },
+  { id: 102, name: "Pixel 11 Pro", brand: "Google", expected: "Oct 2026", desc: "Tensor G6 built on 2nm, groundbreaking AI, and new Pixel Glow design." },
+  { id: 103, name: "Galaxy S27 Ultra", brand: "Samsung", expected: "Early 2027", desc: "Snapdragon 8 Gen 5, enhanced Galaxy AI, and a refined titanium build." },
+  { id: 104, name: "Xiaomi 15T Pro", brand: "Xiaomi", expected: "Late 2026", desc: "Massive silicon-carbon battery and Leica-tuned 200MP camera system." }
 ];
 
 /* ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ BRAND LOGOS ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ */
@@ -205,7 +208,7 @@ function CircleScore({ score:sc, dark }) {
   );
 }
 
-function Navbar({ dark, setDark, page, onRestart }) {
+function Navbar({ dark, setDark, page, onRestart, country, setCountry }) {
   return (
     <nav style={{position:"fixed",top:0,left:0,right:0,zIndex:100,background:dark?"rgba(0,0,0,.88)":"rgba(251,251,253,.88)",backdropFilter:"blur(22px)",WebkitBackdropFilter:"blur(22px)",borderBottom:`1px solid ${dark?"rgba(255,255,255,.08)":"rgba(0,0,0,.08)"}`,height:52}}>
       <div style={{maxWidth:1100,margin:"0 auto",padding:"0 20px",height:"100%",display:"flex",alignItems:"center",justifyContent:"space-between"}}>
@@ -369,7 +372,7 @@ function LoadingPage({ dark }) {
   );
 }
 
-function QuizPage({ step, question, answer, onAnswer, onNext, onPrev, dark, animDir }) {
+function QuizPage({ step, question, answer, onAnswer, onNext, onPrev, dark, animDir, country }) {
   const bg=dark?"radial-gradient(ellipse at 20% 60%,rgba(0,113,227,.12) 0%,transparent 50%),#000":"radial-gradient(ellipse at 20% 60%,rgba(0,113,227,.07) 0%,transparent 50%),#fbfbfd";
   const tx=dark?"#f5f5f7":"#1d1d1f";
   const sb=dark?"rgba(245,245,247,.55)":"rgba(29,29,31,.55)";
@@ -431,7 +434,7 @@ function PhoneCard({ phone, rank, dark, onCompare, inCompare }) {
           <div>
             <span style={{fontSize:10,fontWeight:700,color:"rgba(255,255,255,.6)",letterSpacing:"0.7px",textTransform:"uppercase"}}>{phone.brand}</span>
             <div style={{fontSize:17,fontWeight:800,color:"#fff",letterSpacing:"-0.4px",marginTop:2,lineHeight:1.2}}>{phone.name}</div>
-            <div style={{fontSize:15,fontWeight:700,color:"rgba(255,255,255,.8)",marginTop:5}}>{phone.pStr}</div>
+            <div style={{fontSize:15,fontWeight:700,color:"rgba(255,255,255,.8)",marginTop:5}}>{pStr}</div>
           </div>
           <CircleScore score={phone.sc} dark={true}/>
         </div>
@@ -488,7 +491,7 @@ function PhoneCard({ phone, rank, dark, onCompare, inCompare }) {
   );
 }
 
-function CompareView({ phones, dark, onClose }) {
+function CompareView({ phones, dark, onClose, country }) {
   const bg=dark?"rgba(12,12,14,.98)":"rgba(255,255,255,.98)";
   const brd=dark?"rgba(255,255,255,.1)":"rgba(0,0,0,.08)";
   const tx=dark?"#f5f5f7":"#1d1d1f";
@@ -562,7 +565,7 @@ function CompareView({ phones, dark, onClose }) {
   );
 }
 
-function ResultsPage({ results, dark, onRestart }) {
+function ResultsPage({ results, dark, onRestart, country }) {
   const [cmp, setCmp] = useState([]);
   const [showCmp, setShowCmp] = useState(false);
   const bg=dark?"radial-gradient(ellipse at 20% 50%,rgba(0,113,227,.15) 0%,transparent 52%),radial-gradient(ellipse at 80% 15%,rgba(191,90,242,.1) 0%,transparent 52%),#000":"radial-gradient(ellipse at 20% 50%,rgba(0,113,227,.08) 0%,transparent 52%),radial-gradient(ellipse at 80% 15%,rgba(191,90,242,.06) 0%,transparent 52%),#fbfbfd";
@@ -599,7 +602,7 @@ function ResultsPage({ results, dark, onRestart }) {
                     </div>
                     <div style={{flex:1,minWidth:0}}>
                       <div style={{fontSize:13,fontWeight:700,color:tx,letterSpacing:"-0.2px"}}>{p.name}</div>
-                      <div style={{fontSize:12,color:sb,marginTop:1}}>{p.pStr}</div>
+                      <div style={{fontSize:12,color:sb,marginTop:1}}>{getPriceStr(p.prices[country], country)}</div>
                       <div style={{fontSize:11.5,color:"#0071e3",fontWeight:700,marginTop:4}}>{p.sc}% match</div>
                     </div>
                     <button className="nbtn" onClick={()=>toggle(p)} style={{flexShrink:0,background:inC?"rgba(0,113,227,.14)":"transparent",border:`1px solid ${inC?"#0071e3":(dark?"rgba(255,255,255,.15)":"rgba(0,0,0,.1)")}`,borderRadius:8,padding:"6px 10px",fontSize:11,fontWeight:700,color:inC?"#0071e3":(dark?"rgba(255,255,255,.4)":"rgba(0,0,0,.4)"),cursor:"pointer"}}>
@@ -674,7 +677,7 @@ export default function App() {
     if (step<QUESTIONS.length-1) { setStep(s=>s+1); }
     else {
       setPage("loading");
-      setTimeout(()=>{setResults(topPhones(answers));setPage("results");},1400);
+      setTimeout(()=>{setResults(topPhones(answers, country));setPage("results");},1400);
     }
   };
 
