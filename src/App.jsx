@@ -637,12 +637,19 @@ function ResultsPage({ results, dark, onRestart }) {
 
 /* ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ APP ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ */
 export default function App() {
-  const [dark, setDark] = useState(false);
+  const [dark, setDark] = useState(() => window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches);
   const [page, setPage] = useState("home");
   const [step, setStep] = useState(0);
   const [answers, setAnswers] = useState({});
   const [results, setResults] = useState([]);
   const [animDir, setAnimDir] = useState("forward");
+
+  useEffect(() => {
+    const mq = window.matchMedia('(prefers-color-scheme: dark)');
+    const handler = (e) => setDark(e.matches);
+    mq.addEventListener('change', handler);
+    return () => mq.removeEventListener('change', handler);
+  }, []);
 
   useEffect(()=>{
     const link=document.createElement("link");
