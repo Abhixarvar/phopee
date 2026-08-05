@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react";
-import { Sun, Moon, ChevronRight, ChevronLeft, RotateCcw, X, ExternalLink, BarChart2, Check, Smartphone } from "lucide-react";
+import { Sun, Moon, ChevronRight, ChevronLeft, RotateCcw, X, ExternalLink, BarChart2, Check, Smartphone, Award, Zap, Camera, Battery, Plus, MessageSquare, Edit3 } from "lucide-react";
 
 /* ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ PHONE DATABASE ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ */
 const PHONES = [
@@ -96,7 +96,7 @@ const QUESTIONS = [
     opts:[{v:"new",label:"Brand New",s:"Full warranty & fresh",e:"🎁"},{v:"refurb",label:"Refurbished",s:"Save up to 30%",e:"♻️"},{v:"either",label:"Either is fine",s:"Best deal wins",e:"🤝"}] },
 ];
 
-/* ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ ALGORITHM ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ */
+/* ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ ALGORITHM & REMARKS ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ */
 const BR = { b1:[0,20000], b2:[20000,40000], b3:[40000,70000], b4:[70000,100000], b5:[100000,Infinity] };
 
 function scorePhone(ph, a) {
@@ -152,6 +152,69 @@ function getLinks(name) {
 
 function topPhones(a) {
   return PHONES.map(p=>({...p,sc:scorePhone(p,a),rsns:getReasons(p,a)})).sort((a,b)=>b.sc-a.sc).slice(0,6);
+}
+
+function generateComparisonRemarks(phones) {
+  if (!phones || phones.length === 0) return null;
+  const sortedByCam = [...phones].sort((a,b)=>b.cam-a.cam);
+  const sortedByPerf = [...phones].sort((a,b)=>(b.perf+b.g)-(a.perf+a.g));
+  const sortedByBat = [...phones].sort((a,b)=>b.bat-a.bat);
+  const sortedByValue = [...phones].sort((a,b)=>((b.cam+b.bat+b.perf)/b.price)-((a.cam+a.bat+a.perf)/a.price));
+  const overallWinner = [...phones].sort((a,b)=>(b.cam+b.bat+b.perf+b.g)-(a.cam+a.bat+a.perf+a.g))[0];
+
+  const highlights = [];
+  if (sortedByCam[0]) {
+    highlights.push({
+      title: "📷 Best Photography & Video",
+      phone: sortedByCam[0].name,
+      badge: `${sortedByCam[0].cam}/10 Camera Score`,
+      color: "#0071e3",
+      desc: `${sortedByCam[0].name} leads in image processing, sensor quality, and portrait precision.`
+    });
+  }
+
+  if (sortedByPerf[0]) {
+    highlights.push({
+      title: "⚡ Raw Speed & Gaming Champion",
+      phone: sortedByPerf[0].name,
+      badge: `${sortedByPerf[0].perf}/10 Perf · ${sortedByPerf[0].g}/10 Gaming`,
+      color: "#bf5af2",
+      desc: `${sortedByPerf[0].name} offers maximum frame rates, heavy multitasking efficiency, and thermal stability.`
+    });
+  }
+
+  if (sortedByBat[0]) {
+    highlights.push({
+      title: "🔋 Battery Endurance Leader",
+      phone: sortedByBat[0].name,
+      badge: `${sortedByBat[0].bat}/10 Battery Rating`,
+      color: "#30d158",
+      desc: `${sortedByBat[0].name} delivers the longest single-charge battery backup for demanding screen-on times.`
+    });
+  }
+
+  if (sortedByValue[0] && phones.length > 1) {
+    highlights.push({
+      title: "💰 Smartest Value Pick",
+      phone: sortedByValue[0].name,
+      badge: sortedByValue[0].pStr,
+      color: "#ff9f0a",
+      desc: `${sortedByValue[0].name} packs the highest overall feature rating per Rupee spent in this comparison.`
+    });
+  }
+
+  // Summary Verdict text
+  let summaryVerdict = "";
+  if (phones.length === 1) {
+    summaryVerdict = `${phones[0].name} is a stellar device with strong overall balance (${phones[0].pStr}).`;
+  } else if (phones.length === 2) {
+    const [p1, p2] = phones;
+    summaryVerdict = `Comparing ${p1.name} (${p1.pStr}) vs ${p2.name} (${p2.pStr}): Choose ${bestCam.name} if camera is your top priority, or pick ${bestPerf.name} if you want peak speed and gaming performance.`;
+  } else {
+    summaryVerdict = `Across this ${phones.length}-phone comparison, ${overallWinner.name} stands out as the ultimate flagship all-rounder, while ${sortedByValue[0].name} provides the most aggressive price-to-performance ratio.`;
+  }
+
+  return { overallWinner, highlights, summaryVerdict };
 }
 
 /* ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ STYLES ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ */
@@ -233,19 +296,22 @@ function CircleScore({ score:sc, dark }) {
   );
 }
 
-function Navbar({ dark, setDark, page, onRestart }) {
+function Navbar({ dark, setDark, page, onRestart, onOpenCompare }) {
   return (
     <nav style={{position:"fixed",top:0,left:0,right:0,zIndex:100,background:dark?"rgba(0,0,0,.88)":"rgba(251,251,253,.88)",backdropFilter:"blur(22px)",WebkitBackdropFilter:"blur(22px)",borderBottom:`1px solid ${dark?"rgba(255,255,255,.08)":"rgba(0,0,0,.08)"}`,height:52}}>
       <div style={{maxWidth:1100,margin:"0 auto",padding:"0 20px",height:"100%",display:"flex",alignItems:"center",justifyContent:"space-between"}}>
-        <div style={{display:"flex",alignItems:"center",gap:7}}>
+        <div style={{display:"flex",alignItems:"center",gap:7,cursor:"pointer"}} onClick={onRestart}>
           <div style={{width:26,height:26,borderRadius:8,background:"linear-gradient(135deg,#0071e3,#5ac8fa)",display:"flex",alignItems:"center",justifyContent:"center"}}>
             <Smartphone size={14} color="#fff"/>
           </div>
           <span style={{fontSize:15,fontWeight:800,color:dark?"#f5f5f7":"#1d1d1f",letterSpacing:"-0.4px"}}>Phopee</span>
         </div>
         <div style={{display:"flex",alignItems:"center",gap:10}}>
+          <button className="nbtn" onClick={onOpenCompare} style={{display:"flex",alignItems:"center",gap:5,fontSize:13,fontWeight:700,color:page==="compare"?"#0071e3":(dark?"rgba(255,255,255,.8)":"rgba(0,0,0,.8)"),background:page==="compare"?(dark?"rgba(0,113,227,.2)":"rgba(0,113,227,.1)"):"transparent",border:"none",padding:"5px 12px",borderRadius:8}}>
+            <BarChart2 size={14} color="#0071e3"/> Spec Comparator
+          </button>
           {page!=="home"&&<button className="nbtn" onClick={onRestart} style={{display:"flex",alignItems:"center",gap:5,fontSize:13,fontWeight:600,color:dark?"rgba(255,255,255,.5)":"rgba(0,0,0,.45)",background:"none",border:"none",padding:"5px 10px",borderRadius:8}}>
-            <RotateCcw size={13}/> Restart
+            <RotateCcw size={13}/> Quiz
           </button>}
           <button className="nbtn" onClick={()=>setDark(!dark)} style={{background:dark?"rgba(255,255,255,.1)":"rgba(0,0,0,.06)",border:"none",borderRadius:"50%",width:34,height:34,display:"flex",alignItems:"center",justifyContent:"center",cursor:"pointer"}}>
             {dark?<Sun size={14} color="#f5f5f7"/>:<Moon size={14} color="#1d1d1f"/>}
@@ -317,7 +383,7 @@ function RatingSelector({ value, onChange, labels, dark }) {
 
 /* ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ PAGES ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ */
 
-function HomePage({ onStart, dark }) {
+function HomePage({ onStart, onOpenCompare, dark }) {
   const bg=dark?"radial-gradient(ellipse at 18% 48%,rgba(0,113,227,.22) 0%,transparent 52%),radial-gradient(ellipse at 82% 16%,rgba(191,90,242,.16) 0%,transparent 52%),radial-gradient(ellipse at 55% 85%,rgba(48,209,88,.1) 0%,transparent 45%),#000":"radial-gradient(ellipse at 18% 48%,rgba(0,113,227,.1) 0%,transparent 52%),radial-gradient(ellipse at 82% 16%,rgba(191,90,242,.07) 0%,transparent 52%),radial-gradient(ellipse at 55% 85%,rgba(48,209,88,.06) 0%,transparent 45%),#fbfbfd";
   const tx=dark?"#f5f5f7":"#1d1d1f";
   const sb=dark?"rgba(245,245,247,.6)":"rgba(29,29,31,.6)";
@@ -336,19 +402,22 @@ function HomePage({ onStart, dark }) {
             <span style={{background:"linear-gradient(135deg,#0071e3 0%,#bf5af2 55%,#30d158 100%)",WebkitBackgroundClip:"text",WebkitTextFillColor:"transparent",backgroundClip:"text"}}>Perfect Phone.</span>
           </h1>
           <p className="au d2" style={{fontSize:"clamp(15px,2vw,17px)",color:sb,lineHeight:1.7,marginBottom:30,fontWeight:400}}>
-            Answer 10 smart questions. Our algorithm analyses {PHONES.length} flagship and budget smartphones available in India to find your ideal match — instantly.
+            Answer 10 smart questions or compare detailed specs side-by-side. Our algorithm analyses {PHONES.length} flagship and budget smartphones to find your ideal match — instantly.
           </p>
           <div className="au d3" style={{display:"flex",flexWrap:"wrap",gap:10,marginBottom:36}}>
-            {["🧠 Smart Algorithm",`📱 ${PHONES.length} Latest Phones`,"🇮🇳 India Prices","⚡ 2 Minutes"].map((f,i)=>(
+            {["🧠 Smart Algorithm",`📱 ${PHONES.length} Latest Phones`,"🇮🇳 India Prices","⚖️ Detailed Spec Comparison"].map((f,i)=>(
               <span key={i} style={{fontSize:12.5,fontWeight:500,color:sb,background:dark?"rgba(255,255,255,.07)":"rgba(0,0,0,.05)",border:`1px solid ${dark?"rgba(255,255,255,.1)":"rgba(0,0,0,.08)"}`,borderRadius:20,padding:"4px 12px"}}>{f}</span>
             ))}
           </div>
-          <div className="au d4">
-            <button className="cta" onClick={onStart} style={{background:"#0071e3",color:"#fff",border:"none",borderRadius:980,padding:"15px 34px",fontSize:17,fontWeight:700,letterSpacing:"-0.3px",display:"inline-flex",alignItems:"center",gap:8,boxShadow:"0 8px 28px rgba(0,113,227,.38)"}}>
+          <div className="au d4" style={{display:"flex",flexWrap:"wrap",gap:12,alignItems:"center"}}>
+            <button className="cta" onClick={onStart} style={{background:"#0071e3",color:"#fff",border:"none",borderRadius:980,padding:"15px 32px",fontSize:16,fontWeight:700,letterSpacing:"-0.3px",display:"inline-flex",alignItems:"center",gap:8,boxShadow:"0 8px 28px rgba(0,113,227,.38)"}}>
               Find My Perfect Phone <ChevronRight size={18}/>
             </button>
-            <p style={{fontSize:12,color:dark?"rgba(255,255,255,.28)":"rgba(0,0,0,.28)",marginTop:12}}>Free · No sign-up required · Takes ~2 min</p>
+            <button className="nbtn" onClick={onOpenCompare} style={{background:dark?"rgba(255,255,255,.1)":"rgba(0,0,0,.06)",color:tx,border:`1px solid ${dark?"rgba(255,255,255,.15)":"rgba(0,0,0,.12)"}`,borderRadius:980,padding:"14px 24px",fontSize:15,fontWeight:700,display:"inline-flex",alignItems:"center",gap:8}}>
+              <BarChart2 size={16} color="#0071e3"/> Compare Specs
+            </button>
           </div>
+          <p style={{fontSize:12,color:dark?"rgba(255,255,255,.28)":"rgba(0,0,0,.28)",marginTop:12}}>Free · No sign-up required · Instant comparisons</p>
         </div>
         {/* Floating phones */}
         <div className="au d2" style={{position:"relative",width:240,height:280,flexShrink:0,display:"flex",alignItems:"center",justifyContent:"center"}}>
@@ -516,81 +585,229 @@ function PhoneCard({ phone, rank, dark, onCompare, inCompare }) {
   );
 }
 
-function CompareView({ phones, dark, onClose }) {
-  const bg=dark?"rgba(12,12,14,.98)":"rgba(255,255,255,.98)";
+/* ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ SPEC COMPARATOR & REMARKS STUDIO ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ */
+
+function CompareStudio({ selectedPhones, onTogglePhone, dark, onClose, isModal }) {
+  const bg=dark?"radial-gradient(ellipse at 20% 50%,rgba(0,113,227,.15) 0%,transparent 52%),#0b0b0e":"#fbfbfd";
+  const cardBg=dark?"rgba(22,22,26,.94)":"rgba(255,255,255,.96)";
   const brd=dark?"rgba(255,255,255,.1)":"rgba(0,0,0,.08)";
   const tx=dark?"#f5f5f7":"#1d1d1f";
-  const sb=dark?"rgba(255,255,255,.42)":"rgba(0,0,0,.42)";
-  const specs=[["cam","📷","Camera"],["perf","⚡","Performance"],["bat","🔋","Battery"],["g","🎮","Gaming"]];
-  const cols=`160px repeat(${phones.length},1fr)`;
-  return (
-    <div className="ai" style={{position:"fixed",inset:0,zIndex:200,background:"rgba(0,0,0,.65)",backdropFilter:"blur(10px)",WebkitBackdropFilter:"blur(10px)",display:"flex",alignItems:"flex-end",justifyContent:"center",padding:"0 0 0 0"}}>
-      <div style={{width:"100%",maxWidth:920,background:bg,backdropFilter:"blur(30px)",WebkitBackdropFilter:"blur(30px)",borderRadius:"22px 22px 0 0",border:`1px solid ${brd}`,maxHeight:"92vh",overflow:"hidden",display:"flex",flexDirection:"column"}}>
-        <div style={{padding:"15px 20px",borderBottom:`1px solid ${brd}`,display:"flex",alignItems:"center",justifyContent:"space-between",flexShrink:0}}>
-          <span style={{fontSize:16,fontWeight:800,color:tx,letterSpacing:"-0.3px"}}>Comparison</span>
-          <button className="nbtn" onClick={onClose} style={{background:dark?"rgba(255,255,255,.1)":"rgba(0,0,0,.07)",border:"none",borderRadius:"50%",width:30,height:30,display:"flex",alignItems:"center",justifyContent:"center",cursor:"pointer"}}>
-            <X size={14} color={tx}/>
-          </button>
-        </div>
-        <div style={{overflow:"auto",padding:"18px 20px 24px"}}>
-          {/* Phone headers */}
-          <div style={{display:"grid",gridTemplateColumns:cols,gap:12,marginBottom:22}}>
-            <div/>
-            {phones.map(p=>{
-              const [c1,c2]=GR[p.brand]||["#333","#555"];
-              return (
-                <div key={p.id} style={{background:`linear-gradient(145deg,${c1},${c2})`,borderRadius:16,padding:"14px 12px",textAlign:"center"}}>
-                  <div style={{fontSize:10,fontWeight:700,color:"rgba(255,255,255,.6)",textTransform:"uppercase",letterSpacing:"0.4px"}}>{p.brand}</div>
-                  <div style={{fontSize:14,fontWeight:800,color:"#fff",letterSpacing:"-0.3px",marginTop:2,lineHeight:1.25}}>{p.name}</div>
-                  <div style={{fontSize:13,fontWeight:600,color:"rgba(255,255,255,.72)",marginTop:3}}>{p.pStr}</div>
-                  <div style={{marginTop:8,display:"flex",justifyContent:"center"}}><CircleScore score={p.sc} dark={true}/></div>
-                </div>
-              );
-            })}
+  const sb=dark?"rgba(255,255,255,.48)":"rgba(0,0,0,.48)";
+
+  const [userRemarks, setUserRemarks] = useState(() => {
+    try { return localStorage.getItem("phopee_user_remarks") || ""; } catch(e) { return ""; }
+  });
+  const [savedToast, setSavedToast] = useState(false);
+
+  const saveRemarks = () => {
+    try { localStorage.setItem("phopee_user_remarks", userRemarks); } catch(e) {}
+    setSavedToast(true);
+    setTimeout(() => setSavedToast(false), 2200);
+  };
+
+  const currentPhones = selectedPhones.length > 0 ? selectedPhones : [PHONES[0], PHONES[1]];
+  const remarksData = generateComparisonRemarks(currentPhones);
+
+  const specsRows = [
+    ["pStr", "💰 MRP Price", p => <span style={{fontWeight:700,color:tx}}>{p.pStr}</span>],
+    ["os", "📱 Operating System", p => <span style={{fontWeight:600,color:tx}}>{p.os === "ios" ? "🍎 Apple iOS" : "🤖 Android"}</span>],
+    ["perf", "⚡ Speed & Processor", p => (
+      <div>
+        <div style={{fontWeight:700,color:tx}}>{p.perf}/10</div>
+        <div style={{fontSize:11,color:sb}}>{p.pros[0]}</div>
+      </div>
+    )],
+    ["cam", "📷 Camera Rating", p => (
+      <div>
+        <div style={{fontWeight:700,color:tx}}>{p.cam}/10</div>
+        <div style={{fontSize:11,color:sb}}>{p.pros[1] || "Pro Camera Optics"}</div>
+      </div>
+    )],
+    ["bat", "🔋 Battery Endurance", p => (
+      <div>
+        <div style={{fontWeight:700,color:tx}}>{p.bat}/10</div>
+        <div style={{fontSize:11,color:sb}}>{p.pros[2] || "All-day Battery"}</div>
+      </div>
+    )],
+    ["g", "🎮 Gaming Performance", p => (
+      <div>
+        <div style={{fontWeight:700,color:tx}}>{p.g}/10</div>
+        <div style={{fontSize:11,color:sb}}>{p.g >= 9.5 ? "144Hz / Max Graphics" : p.g >= 8.8 ? "Smooth 90-120Hz Gaming" : "Standard Gaming"}</div>
+      </div>
+    )],
+    ["size", "📐 Form Factor", p => <span style={{textTransform:"capitalize",fontWeight:600,color:tx}}>{p.size} ({p.size === "compact" ? '< 6.3"' : p.size === "standard" ? '6.3"–6.5"' : '6.5"+'})</span>],
+    ["storage", "💾 Storage Options", p => (
+      <div style={{display:"flex",flexWrap:"wrap",gap:4}}>
+        {p.storage.map(s => <span key={s} style={{fontSize:10.5,fontWeight:600,background:dark?"rgba(255,255,255,.1)":"rgba(0,0,0,.06)",borderRadius:6,padding:"2px 6px",color:tx}}>{s>=1000?"1TB":s+"GB"}</span>)}
+      </div>
+    )],
+    ["pros", "✨ Key Strengths", p => (
+      <ul style={{margin:0,paddingLeft:14,fontSize:11.5,color:sb}}>
+        {p.pros.map((pr,i) => <li key={i} style={{marginBottom:2}}>{pr}</li>)}
+      </ul>
+    )],
+  ];
+
+  const cols = `160px repeat(${currentPhones.length}, 1fr)`;
+
+  const content = (
+    <div style={{maxWidth:1100,margin:"0 auto",padding:isModal?"20px 20px 30px":"80px 20px 60px"}}>
+      {/* Header */}
+      <div className="au" style={{display:"flex",justifyContent:"space-between",alignItems:"flex-start",marginBottom:24,flexWrap:"wrap",gap:16}}>
+        <div>
+          <div style={{display:"inline-flex",alignItems:"center",gap:6,background:dark?"rgba(0,113,227,.18)":"rgba(0,113,227,.07)",border:`1px solid ${dark?"rgba(0,113,227,.38)":"rgba(0,113,227,.18)"}`,borderRadius:20,padding:"4px 12px",marginBottom:10}}>
+            <BarChart2 size={13} color="#0071e3"/>
+            <span style={{fontSize:11,fontWeight:700,color:"#0071e3",letterSpacing:"0.5px",textTransform:"uppercase"}}>Detailed Spec Comparison</span>
           </div>
-          {/* Spec rows */}
-          {specs.map(([key,icon,label])=>(
-            <div key={key} style={{display:"grid",gridTemplateColumns:cols,gap:12,marginBottom:16,alignItems:"center"}}>
-              <span style={{fontSize:13,fontWeight:600,color:sb}}>{icon} {label}</span>
-              {phones.map(p=>{
-                const val=p[key];
+          <h1 style={{fontSize:"clamp(24px,4vw,38px)",fontWeight:800,color:tx,letterSpacing:"-1px",lineHeight:1.15}}>
+            Compare Phones Side-By-Side
+          </h1>
+          <p style={{fontSize:14,color:sb,marginTop:6}}>Select phones to inspect exact technical specs and read expert comparison remarks.</p>
+        </div>
+        {isModal && (
+          <button className="nbtn" onClick={onClose} style={{background:dark?"rgba(255,255,255,.1)":"rgba(0,0,0,.06)",border:"none",borderRadius:"50%",width:36,height:36,display:"flex",alignItems:"center",justifyContent:"center",cursor:"pointer"}}>
+            <X size={16} color={tx}/>
+          </button>
+        )}
+      </div>
+
+      {/* Phone Selector Dropdowns / Chips */}
+      <div className="au d1" style={{background:cardBg,border:`1px solid ${brd}`,borderRadius:18,padding:"16px 20px",marginBottom:24}}>
+        <div style={{fontSize:13,fontWeight:700,color:tx,marginBottom:12,display:"flex",alignItems:"center",gap:6}}>
+          <Plus size={14} color="#0071e3"/> Add or Swap Phones to Compare (Up to 4)
+        </div>
+        <div style={{display:"flex",flexWrap:"wrap",gap:8}}>
+          {PHONES.map(ph => {
+            const isSelected = !!currentPhones.find(p => p.id === ph.id);
+            return (
+              <button key={ph.id} onClick={() => onTogglePhone(ph)} className="nbtn" style={{fontSize:12,fontWeight:600,padding:"6px 12px",borderRadius:20,border:`1px solid ${isSelected?"#0071e3":(dark?"rgba(255,255,255,.1)":"rgba(0,0,0,.08)")}`,background:isSelected?(dark?"rgba(0,113,227,.25)":"rgba(0,113,227,.1)"):(dark?"rgba(255,255,255,.04)":"rgba(0,0,0,.03)"),color:isSelected?"#0071e3":tx,cursor:"pointer",display:"inline-flex",alignItems:"center",gap:5}}>
+                {isSelected ? "✓ " : "+ "}{ph.name}
+              </button>
+            );
+          })}
+        </div>
+      </div>
+
+      {/* Detailed Specs Table */}
+      <div className="au d2" style={{background:cardBg,border:`1px solid ${brd}`,borderRadius:22,overflow:"hidden",boxShadow:dark?"0 20px 50px rgba(0,0,0,.4)":"0 16px 40px rgba(0,0,0,.05)",marginBottom:36}}>
+        <div style={{overflowX:"auto"}}>
+          <div style={{minWidth:650,padding:20}}>
+            {/* Headers */}
+            <div style={{display:"grid",gridTemplateColumns:cols,gap:16,paddingBottom:16,borderBottom:`1px solid ${brd}`,alignItems:"stretch"}}>
+              <div style={{display:"flex",alignItems:"center",fontSize:13,fontWeight:800,color:sb,textTransform:"uppercase",letterSpacing:"0.5px"}}>SPECIFICATION</div>
+              {currentPhones.map(ph => {
+                const [c1,c2]=GR[ph.brand]||["#333","#555"];
+                const links=getLinks(ph.name);
                 return (
-                  <div key={p.id}>
-                    <div style={{display:"flex",justifyContent:"space-between",marginBottom:5}}>
-                      <span style={{fontSize:12,fontWeight:700,color:tx}}>{val}/10</span>
-                      <span style={{fontSize:11,color:sb}}>{val>=9.5?"Exceptional":val>=8.5?"Excellent":val>=7.5?"Great":val>=6?"Good":"Fair"}</span>
+                  <div key={ph.id} style={{background:`linear-gradient(145deg,${c1},${c2})`,borderRadius:16,padding:16,color:"#fff",display:"flex",flexDirection:"column",justifyContent:"space-between",position:"relative"}}>
+                    {currentPhones.length > 2 && (
+                      <button onClick={() => onTogglePhone(ph)} style={{position:"absolute",top:8,right:8,background:"rgba(255,255,255,.2)",border:"none",borderRadius:"50%",width:20,height:20,display:"flex",alignItems:"center",justifyContent:"center",cursor:"pointer"}}>
+                        <X size={11} color="#fff"/>
+                      </button>
+                    )}
+                    <div>
+                      <span style={{fontSize:10,fontWeight:700,color:"rgba(255,255,255,.65)",textTransform:"uppercase",letterSpacing:"0.6px"}}>{ph.brand}</span>
+                      <div style={{fontSize:16,fontWeight:800,letterSpacing:"-0.3px",marginTop:2,lineHeight:1.2}}>{ph.name}</div>
+                      <div style={{fontSize:14,fontWeight:700,color:"rgba(255,255,255,.85)",marginTop:4}}>{ph.pStr}</div>
                     </div>
-                    <div style={{height:7,background:dark?"rgba(255,255,255,.08)":"rgba(0,0,0,.07)",borderRadius:4,overflow:"hidden"}}>
-                      <div className="sbar" style={{width:`${val*10}%`,height:"100%",background:`linear-gradient(90deg,${val>=9?"#30d158":val>=7.5?"#0071e3":"#ff9f0a"},${val>=9?"#34c759":"#5ac8fa"})`,borderRadius:4}}/>
+                    <div style={{marginTop:12,display:"flex",gap:4}}>
+                      <a href={links.amazon} target="_blank" rel="noreferrer" style={{flex:1,textAlign:"center",fontSize:10.5,fontWeight:700,background:"#e47911",color:"#fff",borderRadius:6,padding:"4px 0",textDecoration:"none"}}>Amazon</a>
+                      <a href={links.flipkart} target="_blank" rel="noreferrer" style={{flex:1,textAlign:"center",fontSize:10.5,fontWeight:700,background:"#2874f0",color:"#fff",borderRadius:6,padding:"4px 0",textDecoration:"none"}}>Flipkart</a>
                     </div>
                   </div>
                 );
               })}
             </div>
-          ))}
-          {/* Storage */}
-          <div style={{display:"grid",gridTemplateColumns:cols,gap:12,marginBottom:14,alignItems:"center"}}>
-            <span style={{fontSize:13,fontWeight:600,color:sb}}>💾 Storage</span>
-            {phones.map(p=>(
-              <div key={p.id} style={{display:"flex",flexWrap:"wrap",gap:5}}>
-                {p.storage.map(s=><span key={s} style={{fontSize:11.5,fontWeight:600,color:tx,background:dark?"rgba(255,255,255,.1)":"rgba(0,0,0,.07)",borderRadius:7,padding:"3px 8px"}}>{s>=1000?"1TB":s+"GB"}</span>)}
+
+            {/* Rows */}
+            {specsRows.map(([key, label, renderFn], idx) => (
+              <div key={key} style={{display:"grid",gridTemplateColumns:cols,gap:16,padding:"14px 0",borderBottom:idx===specsRows.length-1?"none":`1px solid ${brd}`,alignItems:"center"}}>
+                <div style={{fontSize:12.5,fontWeight:700,color:sb}}>{label}</div>
+                {currentPhones.map(ph => (
+                  <div key={ph.id} style={{fontSize:12.5}}>
+                    {renderFn(ph)}
+                  </div>
+                ))}
               </div>
-            ))}
-          </div>
-          {/* OS */}
-          <div style={{display:"grid",gridTemplateColumns:cols,gap:12,alignItems:"center"}}>
-            <span style={{fontSize:13,fontWeight:600,color:sb}}>📱 Platform</span>
-            {phones.map(p=>(
-              <span key={p.id} style={{fontSize:13,fontWeight:600,color:tx}}>{p.os==="ios"?"🍎 iOS":"🤖 Android"}</span>
             ))}
           </div>
         </div>
       </div>
+
+      {/* ━━━━━━━━━━━━━━━━━━━━ REMARKS & VERDICT SECTION ━━━━━━━━━━━━━━━━━━━━ */}
+      {remarksData && (
+        <div className="au d3" style={{background:cardBg,border:`1px solid ${brd}`,borderRadius:22,padding:"28px 24px",boxShadow:dark?"0 20px 50px rgba(0,0,0,.4)":"0 16px 40px rgba(0,0,0,.05)",marginBottom:36}}>
+          <div style={{display:"flex",alignItems:"center",gap:10,marginBottom:20}}>
+            <div style={{width:36,height:36,borderRadius:10,background:"linear-gradient(135deg,#0071e3,#bf5af2)",display:"flex",alignItems:"center",justifyContent:"center"}}>
+              <Award size={20} color="#fff"/>
+            </div>
+            <div>
+              <h2 style={{fontSize:20,fontWeight:800,color:tx,letterSpacing:"-0.4px"}}>Comparison Remarks & Expert Verdict</h2>
+              <p style={{fontSize:12.5,color:sb}}>Automated breakdown of category winners and key takeaways.</p>
+            </div>
+          </div>
+
+          {/* Verdict Summary Box */}
+          <div style={{background:dark?"rgba(0,113,227,.12)":"rgba(0,113,227,.05)",border:`1px solid ${dark?"rgba(0,113,227,.3)":"rgba(0,113,227,.15)"}`,borderRadius:16,padding:"16px 20px",marginBottom:24}}>
+            <div style={{fontSize:12,fontWeight:800,color:"#0071e3",textTransform:"uppercase",letterSpacing:"0.6px",marginBottom:6}}>Summary Takeaway</div>
+            <div style={{fontSize:14.5,fontWeight:600,color:tx,lineHeight:1.6}}>{remarksData.summaryVerdict}</div>
+          </div>
+
+          {/* Category Highlights Grid */}
+          <div style={{display:"grid",gridTemplateColumns:"repeat(auto-fit,minmax(230px,1fr))",gap:14,marginBottom:28}}>
+            {remarksData.highlights.map(hl => (
+              <div key={hl.title} style={{background:dark?"rgba(255,255,255,.03)":"rgba(0,0,0,.02)",border:`1px solid ${dark?"rgba(255,255,255,.08)":"rgba(0,0,0,.06)"}`,borderRadius:16,padding:"16px"}}>
+                <div style={{fontSize:12.5,fontWeight:800,color:hl.color,marginBottom:6}}>{hl.title}</div>
+                <div style={{fontSize:15,fontWeight:800,color:tx,letterSpacing:"-0.2px",marginBottom:4}}>{hl.phone}</div>
+                <span style={{fontSize:11,fontWeight:700,background:dark?"rgba(255,255,255,.1)":"rgba(0,0,0,.06)",color:tx,padding:"2px 8px",borderRadius:10,display:"inline-block",marginBottom:8}}>{hl.badge}</span>
+                <p style={{fontSize:12,color:sb,lineHeight:1.5,margin:0}}>{hl.desc}</p>
+              </div>
+            ))}
+          </div>
+
+          {/* Interactive User Remarks Box */}
+          <div style={{borderTop:`1px solid ${brd}`,paddingTop:22}}>
+            <div style={{display:"flex",alignItems:"center",justifyContent:"space-between",marginBottom:10}}>
+              <div style={{fontSize:14,fontWeight:800,color:tx,display:"flex",alignItems:"center",gap:6}}>
+                <Edit3 size={15} color="#0071e3"/> Add Your Personal Notes & Remarks
+              </div>
+              {savedToast && <span className="ai" style={{fontSize:12,fontWeight:700,color:"#30d158"}}>✓ Saved to browser!</span>}
+            </div>
+            <textarea
+              value={userRemarks}
+              onChange={e => setUserRemarks(e.target.value)}
+              placeholder="Type your personal observations or decision notes here (e.g. 'Choosing S25 Ultra for S Pen & battery life...')..."
+              style={{width:"100%",minHeight:90,borderRadius:12,padding:14,background:dark?"rgba(0,0,0,.4)":"rgba(0,0,0,.03)",border:`1px solid ${brd}`,color:tx,fontSize:13.5,outline:"none",fontFamily:"inherit",resize:"vertical"}}
+            />
+            <div style={{display:"flex",justifyContent:"flex-end",marginTop:10}}>
+              <button className="cta" onClick={saveRemarks} style={{background:"#0071e3",color:"#fff",border:"none",borderRadius:10,padding:"9px 20px",fontSize:13,fontWeight:700,cursor:"pointer",display:"inline-flex",alignItems:"center",gap:6}}>
+                <MessageSquare size={13}/> Save Remarks
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
+    </div>
+  );
+
+  if (isModal) {
+    return (
+      <div className="ai" style={{position:"fixed",inset:0,zIndex:200,background:"rgba(0,0,0,.75)",backdropFilter:"blur(12px)",WebkitBackdropFilter:"blur(12px)",overflowY:"auto"}}>
+        <div style={{background:bg,minHeight:"100vh"}}>
+          {content}
+        </div>
+      </div>
+    );
+  }
+
+  return (
+    <div style={{minHeight:"100vh",background:bg}}>
+      {content}
     </div>
   );
 }
 
-function ResultsPage({ results, dark, onRestart }) {
+function ResultsPage({ results, dark, onRestart, onOpenCompare }) {
   const [cmp, setCmp] = useState([]);
   const [showCmp, setShowCmp] = useState(false);
   const bg=dark?"radial-gradient(ellipse at 20% 50%,rgba(0,113,227,.15) 0%,transparent 52%),radial-gradient(ellipse at 80% 15%,rgba(191,90,242,.1) 0%,transparent 52%),#000":"radial-gradient(ellipse at 20% 50%,rgba(0,113,227,.08) 0%,transparent 52%),radial-gradient(ellipse at 80% 15%,rgba(191,90,242,.06) 0%,transparent 52%),#fbfbfd";
@@ -599,7 +816,7 @@ function ResultsPage({ results, dark, onRestart }) {
   const brd=dark?"rgba(255,255,255,.08)":"rgba(0,0,0,.07)";
   const top3=results.slice(0,3);
   const rest=results.slice(3,6);
-  const toggle=(ph)=>setCmp(c=>c.find(p=>p.id===ph.id)?c.filter(p=>p.id!==ph.id):c.length>=3?c:[...c,ph]);
+  const toggle=(ph)=>setCmp(c=>c.find(p=>p.id===ph.id)?c.filter(p=>p.id!==ph.id):c.length>=4?c:[...c,ph]);
   return (
     <div style={{minHeight:"100vh",background:bg,paddingTop:52}}>
       <div style={{maxWidth:1080,margin:"0 auto",padding:"40px 20px 110px"}}>
@@ -639,10 +856,13 @@ function ResultsPage({ results, dark, onRestart }) {
             </div>
           </div>
         )}
-        {/* Restart */}
-        <div style={{textAlign:"center"}}>
+        {/* Restart / Compare buttons */}
+        <div style={{display:"flex",justifyContent:"center",gap:12,flexWrap:"wrap"}}>
           <button className="nbtn" onClick={onRestart} style={{display:"inline-flex",alignItems:"center",gap:8,background:"transparent",border:`1.5px solid ${dark?"rgba(255,255,255,.18)":"rgba(0,0,0,.14)"}`,borderRadius:980,padding:"12px 28px",fontSize:14,fontWeight:600,color:sb,cursor:"pointer"}}>
             <RotateCcw size={14}/> Start Over
+          </button>
+          <button className="cta" onClick={() => onOpenCompare(top3)} style={{display:"inline-flex",alignItems:"center",gap:8,background:"#0071e3",color:"#fff",border:"none",borderRadius:980,padding:"12px 28px",fontSize:14,fontWeight:700,cursor:"pointer",boxShadow:"0 6px 20px rgba(0,113,227,.35)"}}>
+            <BarChart2 size={15}/> Compare Top Matches in Detail
           </button>
         </div>
       </div>
@@ -651,14 +871,14 @@ function ResultsPage({ results, dark, onRestart }) {
         <div className="au" style={{position:"fixed",bottom:20,left:"50%",transform:"translateX(-50%)",zIndex:50,background:dark?"rgba(28,28,30,.96)":"rgba(255,255,255,.96)",backdropFilter:"blur(22px)",WebkitBackdropFilter:"blur(22px)",border:`1px solid ${dark?"rgba(255,255,255,.14)":"rgba(0,0,0,.12)"}`,borderRadius:980,padding:"9px 9px 9px 18px",display:"flex",alignItems:"center",gap:10,boxShadow:"0 8px 36px rgba(0,0,0,.22)",whiteSpace:"nowrap"}}>
           <span style={{fontSize:13,fontWeight:600,color:tx}}>{cmp.length} phones selected</span>
           <button className="cta" onClick={()=>setShowCmp(true)} style={{background:"#0071e3",color:"#fff",border:"none",borderRadius:980,padding:"9px 18px",fontSize:13,fontWeight:700,cursor:"pointer",display:"flex",alignItems:"center",gap:5,boxShadow:"0 4px 16px rgba(0,113,227,.35)"}}>
-            <BarChart2 size={13}/> Compare
+            <BarChart2 size={13}/> Compare Specs
           </button>
           <button className="nbtn" onClick={()=>setCmp([])} style={{background:"transparent",border:"none",borderRadius:"50%",width:28,height:28,display:"flex",alignItems:"center",justifyContent:"center",cursor:"pointer"}}>
             <X size={13} color={sb}/>
           </button>
         </div>
       )}
-      {showCmp&&<CompareView phones={cmp} dark={dark} onClose={()=>setShowCmp(false)}/>}
+      {showCmp&&<CompareStudio selectedPhones={cmp} onTogglePhone={toggle} dark={dark} onClose={()=>setShowCmp(false)} isModal={true}/>}
     </div>
   );
 }
@@ -671,6 +891,7 @@ export default function App() {
   const [answers, setAnswers] = useState({});
   const [results, setResults] = useState([]);
   const [animDir, setAnimDir] = useState("forward");
+  const [compareSelection, setCompareSelection] = useState([PHONES[0], PHONES[1]]);
 
   useEffect(() => {
     const mq = window.matchMedia('(prefers-color-scheme: dark)');
@@ -697,6 +918,23 @@ export default function App() {
   const restart=()=>{setStep(0);setAnswers({});setResults([]);setPage("home")};
   const setAnswer=(v)=>setAnswers(a=>({...a,[QUESTIONS[step].id]:v}));
 
+  const openCompareStudio = (initialPhones) => {
+    if (initialPhones && Array.isArray(initialPhones) && initialPhones.length > 0) {
+      setCompareSelection(initialPhones);
+    }
+    setPage("compare");
+  };
+
+  const toggleComparePhone = (ph) => {
+    setCompareSelection(curr => {
+      if (curr.find(p => p.id === ph.id)) {
+        return curr.length > 1 ? curr.filter(p => p.id !== ph.id) : curr;
+      } else {
+        return curr.length >= 4 ? [...curr.slice(1), ph] : [...curr, ph];
+      }
+    });
+  };
+
   const goNext=()=>{
     setAnimDir("forward");
     if (step<QUESTIONS.length-1) { setStep(s=>s+1); }
@@ -712,11 +950,12 @@ export default function App() {
 
   return (
     <div className="papp" style={{minHeight:"100vh"}}>
-      <Navbar dark={dark} setDark={setDark} page={page} onRestart={restart}/>
-      {page==="home"    && <HomePage    onStart={startQuiz} dark={dark}/>}
+      <Navbar dark={dark} setDark={setDark} page={page} onRestart={restart} onOpenCompare={() => openCompareStudio()}/>
+      {page==="home"    && <HomePage    onStart={startQuiz} onOpenCompare={() => openCompareStudio()} dark={dark}/>}
       {page==="quiz"    && <QuizPage    step={step} question={curQ} answer={curA} onAnswer={setAnswer} onNext={goNext} onPrev={goPrev} dark={dark} animDir={animDir}/>}
       {page==="loading" && <LoadingPage dark={dark}/>}
-      {page==="results" && <ResultsPage results={results} dark={dark} onRestart={restart}/>}
+      {page==="results" && <ResultsPage results={results} dark={dark} onRestart={restart} onOpenCompare={openCompareStudio}/>}
+      {page==="compare" && <CompareStudio selectedPhones={compareSelection} onTogglePhone={toggleComparePhone} dark={dark} onClose={()=>setPage("home")} isModal={false}/>}
     </div>
   );
 }
