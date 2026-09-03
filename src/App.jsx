@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react";
-import { Sun, Moon, ChevronRight, ChevronLeft, RotateCcw, X, ExternalLink, BarChart2, Check, Smartphone, Award, Zap, Camera, Battery, Plus, MessageSquare, Edit3 } from "lucide-react";
+import { Sun, Moon, ChevronRight, ChevronLeft, RotateCcw, X, ExternalLink, BarChart2, Check, Smartphone, Award, Zap, Camera, Battery, Plus, MessageSquare, Edit3, Globe, Clock } from "lucide-react";
 
 /* ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ PHONE DATABASE ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ */
 const PHONES = [
@@ -383,6 +383,58 @@ function RatingSelector({ value, onChange, labels, dark }) {
 
 /* ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ PAGES ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ */
 
+function PhoneNews({ dark }) {
+  const [news, setNews] = useState([]);
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    async function fetchNews() {
+      try {
+        const res = await fetch('https://api.rss2json.com/v1/api.json?rss_url=https%3A%2F%2Fwww.gsmarena.com%2Frss-news-reviews.php3');
+        const data = await res.json();
+        if (data.status === 'ok') {
+          setNews(data.items.slice(0, 4));
+        }
+      } catch (err) {
+        console.error("Failed to fetch news", err);
+      } finally {
+        setLoading(false);
+      }
+    }
+    fetchNews();
+  }, []);
+
+  const tx=dark?"#f5f5f7":"#1d1d1f";
+  const sb=dark?"rgba(245,245,247,.6)":"rgba(29,29,31,.6)";
+
+  return (
+    <div style={{maxWidth:1060,width:"100%",padding:"0 24px 60px"}}>
+      <div style={{display:"flex",alignItems:"center",gap:8,marginBottom:20}}>
+        <Globe size={22} color="#0071e3"/>
+        <h2 className="au" style={{fontSize:22,fontWeight:800,color:tx,letterSpacing:"-0.5px",margin:0}}>Latest Phone News</h2>
+      </div>
+      
+      {loading ? (
+        <div style={{display:"flex",gap:8,padding:"40px 0",justifyContent:"center"}}>
+          {["dot1","dot2","dot3"].map(c=><div key={c} className={c} style={{width:8,height:8,borderRadius:"50%",background:"#0071e3"}}/>)}
+        </div>
+      ) : (
+        <div className="au d1" style={{display:"grid",gridTemplateColumns:"repeat(auto-fit,minmax(240px,1fr))",gap:16}}>
+          {news.map((item, i) => (
+            <a key={i} href={item.link} target="_blank" rel="noopener noreferrer" className="opt" style={{background:dark?"rgba(255,255,255,.03)":"rgba(0,0,0,.02)",border:`1px solid ${dark?"rgba(255,255,255,.08)":"rgba(0,0,0,.06)"}`,borderRadius:16,padding:"18px",textDecoration:"none",display:"flex",flexDirection:"column"}}>
+              {item.thumbnail && <img src={item.thumbnail} alt="" style={{width:"100%",height:140,objectFit:"cover",borderRadius:10,marginBottom:12}}/>}
+              <div style={{fontSize:15,fontWeight:800,color:tx,letterSpacing:"-0.2px",lineHeight:1.3,marginBottom:8}}>{item.title}</div>
+              <div style={{marginTop:"auto",display:"flex",alignItems:"center",gap:5,fontSize:11,fontWeight:600,color:sb}}>
+                <Clock size={12}/> {new Date(item.pubDate).toLocaleDateString(undefined, {month:'short',day:'numeric'})}
+              </div>
+            </a>
+          ))}
+        </div>
+      )}
+    </div>
+  );
+}
+
 function HomePage({ onStart, onOpenCompare, dark }) {
   const bg=dark?"radial-gradient(ellipse at 18% 48%,rgba(0,113,227,.22) 0%,transparent 52%),radial-gradient(ellipse at 82% 16%,rgba(191,90,242,.16) 0%,transparent 52%),radial-gradient(ellipse at 55% 85%,rgba(48,209,88,.1) 0%,transparent 45%),#000":"radial-gradient(ellipse at 18% 48%,rgba(0,113,227,.1) 0%,transparent 52%),radial-gradient(ellipse at 82% 16%,rgba(191,90,242,.07) 0%,transparent 52%),radial-gradient(ellipse at 55% 85%,rgba(48,209,88,.06) 0%,transparent 45%),#fbfbfd";
   const tx=dark?"#f5f5f7":"#1d1d1f";
@@ -444,6 +496,9 @@ function HomePage({ onStart, onOpenCompare, dark }) {
           ))}
         </div>
       </div>
+
+      {/* Phone News Section */}
+      <PhoneNews dark={dark} />
     </div>
   );
 }
