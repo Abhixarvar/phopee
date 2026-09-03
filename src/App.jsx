@@ -47,7 +47,6 @@ const PHONES = [
 
 /* ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ UPCOMING PHONES ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ */
 const UPCOMING_PHONES = [
-  { id: 101, name: "iPhone 17 Pro Max", brand: "Apple", expected: "Sep 2025", desc: "Next-gen A19 Pro 2nm chip, anti-reflective display, and upgraded telephoto." },
   { id: 102, name: "Galaxy S26 Ultra", brand: "Samsung", expected: "Early 2026", desc: "Snapdragon 8 Gen 5, enhanced Galaxy AI, and a refined titanium unibody." },
   { id: 103, name: "Pixel 10 Pro XL", brand: "Google", expected: "Oct 2025", desc: "First fully custom TSMC Tensor G5 chip with revolutionary on-device AI." },
   { id: 104, name: "Nothing Phone (3)", brand: "Nothing", expected: "Mid 2025", desc: "True flagship processor, evolved Glyph Interface, and advanced AI interactions." }
@@ -101,7 +100,8 @@ const BR = { b1:[0,20000], b2:[20000,40000], b3:[40000,70000], b4:[70000,100000]
 function scorePhone(ph, a) {
   let s = 0;
   const [mn,mx] = BR[a.budget]||[0,Infinity];
-  if (ph.price>=mn && ph.price<=mx) s+=25; else if (ph.price<mn) s+=15; else s+=Math.max(0,25-Math.round(((ph.price-mx)/mx)*50));
+  if (ph.price > mx * 1.15) return 0;
+  if (ph.price>=mn && ph.price<=mx) s+=30; else if (ph.price<mn) s+=20; else s+=Math.max(0,10-Math.round(((ph.price-mx)/mx)*100));
   if (!a.os||a.os==="any"||ph.os===a.os) s+=20;
   const u={gaming:ph.g,camera:ph.cam,social:ph.cam*.6+ph.perf*.4,business:ph.perf*.6+ph.bat*.4,content:ph.cam*.5+ph.perf*.5,battery:ph.bat,general:(ph.g+ph.cam+ph.bat+ph.perf)/4}[a.usage]||7;
   s+=Math.round((u/10)*15);
