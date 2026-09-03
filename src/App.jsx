@@ -900,8 +900,8 @@ function PhoneMediaModal({ phone, dark, onClose }) {
 
   return (
     <div className="ai" style={{position:"fixed",inset:0,zIndex:300,background:"rgba(0,0,0,.8)",backdropFilter:"blur(12px)",display:"flex",alignItems:"center",justifyContent:"center",padding:20}}>
-      <div className="as" style={{background:bg,width:"100%",maxWidth:800,maxHeight:"90vh",borderRadius:24,border:\`1px solid \${brd}\`,display:"flex",flexDirection:"column",overflow:"hidden",boxShadow:"0 24px 60px rgba(0,0,0,.4)"}}>
-        <div style={{padding:"20px 24px",borderBottom:\`1px solid \${brd}\`,display:"flex",justifyContent:"space-between",alignItems:"center",flexShrink:0}}>
+      <div className="as" style={{background:bg,width:"100%",maxWidth:800,maxHeight:"90vh",borderRadius:24,border:`1px solid ${brd}`,display:"flex",flexDirection:"column",overflow:"hidden",boxShadow:"0 24px 60px rgba(0,0,0,.4)"}}>
+        <div style={{padding:"20px 24px",borderBottom:`1px solid ${brd}`,display:"flex",justifyContent:"space-between",alignItems:"center",flexShrink:0}}>
           <div>
             <div style={{fontSize:12,fontWeight:700,color:sb,textTransform:"uppercase",letterSpacing:"0.5px"}}>{phone.brand}</div>
             <div style={{fontSize:22,fontWeight:800,color:tx,letterSpacing:"-0.5px"}}>{phone.name} Media</div>
