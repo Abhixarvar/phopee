@@ -1,6 +1,5 @@
 import { useState, useEffect } from "react";
-import { Sun, Moon, ChevronRight, ChevronLeft, RotateCcw, X, ExternalLink, BarChart2, Check, Smartphone, Award, Zap, Camera, Battery, Plus, MessageSquare, Edit3, Globe, Clock } from "lucide-react";
-
+import { Sun, Moon, ChevronRight, ChevronLeft, RotateCcw, X, ExternalLink, BarChart2, Check, Smartphone, Award, Zap, Camera, Battery, Plus, MessageSquare, Edit3, Globe, Clock, Video, Image as ImageIcon, Play, Youtube } from "lucide-react";
 /* ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ PHONE DATABASE ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ */
 const PHONES = [
   // Flagship Ultra & Pro (₹1,00,000+)
@@ -631,10 +630,17 @@ function PhoneCard({ phone, rank, dark, onCompare, inCompare }) {
             </a>
           ))}
         </div>
-        {/* Compare toggle */}
-        <button className="nbtn" onClick={()=>onCompare(phone)} style={{width:"100%",padding:"9px",borderRadius:10,border:`1.5px solid ${inCompare?"#0071e3":(dark?"rgba(255,255,255,.14)":"rgba(0,0,0,.11)")}`,background:inCompare?(dark?"rgba(0,113,227,.18)":"rgba(0,113,227,.07)"):"transparent",fontSize:12.5,fontWeight:600,color:inCompare?"#0071e3":(dark?"rgba(255,255,255,.45)":"rgba(0,0,0,.45)"),cursor:"pointer",display:"flex",alignItems:"center",justifyContent:"center",gap:5}}>
-          <BarChart2 size={12}/> {inCompare?"Added to Compare ✓":"+ Add to Compare"}
-        </button>
+        {/* Compare & Media toggles */}
+        <div style={{display:"flex",gap:7}}>
+          <button className="nbtn" onClick={()=>onCompare(phone)} style={{flex:1,padding:"9px",borderRadius:10,border:`1.5px solid ${inCompare?"#0071e3":(dark?"rgba(255,255,255,.14)":"rgba(0,0,0,.11)")}`,background:inCompare?(dark?"rgba(0,113,227,.18)":"rgba(0,113,227,.07)"):"transparent",fontSize:12.5,fontWeight:600,color:inCompare?"#0071e3":(dark?"rgba(255,255,255,.45)":"rgba(0,0,0,.45)"),cursor:"pointer",display:"flex",alignItems:"center",justifyContent:"center",gap:5}}>
+            <BarChart2 size={12}/> {inCompare?"Added ✓":"+ Compare"}
+          </button>
+          {phone.onOpenMedia && (
+            <button className="nbtn" onClick={()=>phone.onOpenMedia(phone)} style={{flex:1,padding:"9px",borderRadius:10,border:`1.5px solid ${dark?"rgba(255,255,255,.14)":"rgba(0,0,0,.11)"}`,background:"transparent",fontSize:12.5,fontWeight:600,color:dark?"rgba(255,255,255,.8)":"rgba(0,0,0,.8)",cursor:"pointer",display:"flex",alignItems:"center",justifyContent:"center",gap:5}}>
+              <Youtube size={12} color="#ff0000" /> Media
+            </button>
+          )}
+        </div>
       </div>
     </div>
   );
@@ -862,7 +868,90 @@ function CompareStudio({ selectedPhones, onTogglePhone, dark, onClose, isModal }
   );
 }
 
-function ResultsPage({ results, dark, onRestart, onOpenCompare }) {
+function PhoneMediaModal({ phone, dark, onClose }) {
+  const [images, setImages] = useState([]);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
+
+  const bg = dark ? "rgba(22,22,26,.94)" : "rgba(255,255,255,.96)";
+  const tx = dark ? "#f5f5f7" : "#1d1d1f";
+  const brd = dark ? "rgba(255,255,255,.1)" : "rgba(0,0,0,.08)";
+  const sb = dark ? "rgba(255,255,255,.5)" : "rgba(0,0,0,.5)";
+
+  useEffect(() => {
+    async function fetchImages() {
+      try {
+        const query = encodeURIComponent(`${phone.brand} ${phone.name} smartphone high quality`);
+        const res = await fetch(`/api/fetch-images?q=${query}`);
+        const data = await res.json();
+        if (res.ok) {
+          setImages(data.images || []);
+        } else {
+          setError(data.error || "Failed to load images.");
+        }
+      } catch (e) {
+        setError("Network error fetching images.");
+      } finally {
+        setLoading(false);
+      }
+    }
+    fetchImages();
+  }, [phone]);
+
+  return (
+    <div className="ai" style={{position:"fixed",inset:0,zIndex:300,background:"rgba(0,0,0,.8)",backdropFilter:"blur(12px)",display:"flex",alignItems:"center",justifyContent:"center",padding:20}}>
+      <div className="as" style={{background:bg,width:"100%",maxWidth:800,maxHeight:"90vh",borderRadius:24,border:\`1px solid \${brd}\`,display:"flex",flexDirection:"column",overflow:"hidden",boxShadow:"0 24px 60px rgba(0,0,0,.4)"}}>
+        <div style={{padding:"20px 24px",borderBottom:\`1px solid \${brd}\`,display:"flex",justifyContent:"space-between",alignItems:"center",flexShrink:0}}>
+          <div>
+            <div style={{fontSize:12,fontWeight:700,color:sb,textTransform:"uppercase",letterSpacing:"0.5px"}}>{phone.brand}</div>
+            <div style={{fontSize:22,fontWeight:800,color:tx,letterSpacing:"-0.5px"}}>{phone.name} Media</div>
+          </div>
+          <button className="nbtn" onClick={onClose} style={{background:dark?"rgba(255,255,255,.1)":"rgba(0,0,0,.06)",border:"none",borderRadius:"50%",width:36,height:36,display:"flex",alignItems:"center",justifyContent:"center",cursor:"pointer"}}>
+            <X size={16} color={tx}/>
+          </button>
+        </div>
+        <div style={{overflowY:"auto",padding:24,flex:1}}>
+          <h3 style={{fontSize:16,fontWeight:700,color:tx,display:"flex",alignItems:"center",gap:6,marginBottom:16}}>
+            <Youtube size={18} color="#ff0000"/> Top YouTube Review & Trailer
+          </h3>
+          <div style={{width:"100%",aspectRatio:"16/9",background:"#000",borderRadius:12,overflow:"hidden",marginBottom:32}}>
+            <iframe 
+              width="100%" 
+              height="100%" 
+              src={\`https://www.youtube.com/embed?listType=search&list=\${encodeURIComponent(phone.brand + ' ' + phone.name + ' review trailer')}\`} 
+              frameBorder="0" 
+              allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" 
+              allowFullScreen>
+            </iframe>
+          </div>
+          
+          <h3 style={{fontSize:16,fontWeight:700,color:tx,display:"flex",alignItems:"center",gap:6,marginBottom:16}}>
+            <ImageIcon size={18} color="#0071e3"/> Actual Photos
+          </h3>
+          {loading ? (
+            <div style={{display:"flex",gap:8,padding:"40px 0",justifyContent:"center"}}>
+              {["dot1","dot2","dot3"].map(c=><div key={c} className={c} style={{width:8,height:8,borderRadius:"50%",background:"#0071e3"}}/>)}
+            </div>
+          ) : error ? (
+            <div style={{padding:"20px",background:dark?"rgba(255,69,58,.1)":"rgba(255,69,58,.05)",color:"#ff453a",borderRadius:12,fontSize:14,fontWeight:600}}>{error}</div>
+          ) : images.length > 0 ? (
+            <div style={{display:"grid",gridTemplateColumns:"repeat(auto-fit,minmax(180px,1fr))",gap:12}}>
+              {images.map((img, i) => (
+                <a key={i} href={img.link} target="_blank" rel="noopener noreferrer" style={{display:"block",borderRadius:12,overflow:"hidden",border:\`1px solid \${brd}\`}}>
+                  <img src={img.link} alt={img.title} style={{width:"100%",height:160,objectFit:"cover",display:"block"}} onError={(e) => { e.target.src = img.thumbnail; }}/>
+                </a>
+              ))}
+            </div>
+          ) : (
+            <div style={{fontSize:14,color:sb}}>No images found.</div>
+          )}
+        </div>
+      </div>
+    </div>
+  );
+}
+
+function ResultsPage({ results, dark, onRestart, onOpenCompare, onOpenMedia }) {
   const [cmp, setCmp] = useState([]);
   const [showCmp, setShowCmp] = useState(false);
   const bg=dark?"radial-gradient(ellipse at 20% 50%,rgba(0,113,227,.15) 0%,transparent 52%),radial-gradient(ellipse at 80% 15%,rgba(191,90,242,.1) 0%,transparent 52%),#000":"radial-gradient(ellipse at 20% 50%,rgba(0,113,227,.08) 0%,transparent 52%),radial-gradient(ellipse at 80% 15%,rgba(191,90,242,.06) 0%,transparent 52%),#fbfbfd";
@@ -882,7 +971,7 @@ function ResultsPage({ results, dark, onRestart, onOpenCompare }) {
         </div>
         {/* Top 3 */}
         <div style={{display:"grid",gridTemplateColumns:"repeat(auto-fit,minmax(300px,1fr))",gap:20,marginBottom:36}}>
-          {top3.map((p,i)=><PhoneCard key={p.id} phone={p} rank={i+1} dark={dark} onCompare={toggle} inCompare={!!cmp.find(c=>c.id===p.id)}/>)}
+          {top3.map((p,i)=><PhoneCard key={p.id} phone={{...p, onOpenMedia}} rank={i+1} dark={dark} onCompare={toggle} inCompare={!!cmp.find(c=>c.id===p.id)}/>)}
         </div>
         {/* Also Consider */}
         {rest.length>0&&(
@@ -947,6 +1036,7 @@ export default function App() {
   const [results, setResults] = useState([]);
   const [animDir, setAnimDir] = useState("forward");
   const [compareSelection, setCompareSelection] = useState([PHONES[0], PHONES[1]]);
+  const [mediaPhone, setMediaPhone] = useState(null);
 
   useEffect(() => {
     const mq = window.matchMedia('(prefers-color-scheme: dark)');
@@ -1009,8 +1099,9 @@ export default function App() {
       {page==="home"    && <HomePage    onStart={startQuiz} onOpenCompare={() => openCompareStudio()} dark={dark}/>}
       {page==="quiz"    && <QuizPage    step={step} question={curQ} answer={curA} onAnswer={setAnswer} onNext={goNext} onPrev={goPrev} dark={dark} animDir={animDir}/>}
       {page==="loading" && <LoadingPage dark={dark}/>}
-      {page==="results" && <ResultsPage results={results} dark={dark} onRestart={restart} onOpenCompare={openCompareStudio}/>}
+      {page==="results" && <ResultsPage results={results} dark={dark} onRestart={restart} onOpenCompare={openCompareStudio} onOpenMedia={setMediaPhone}/>}
       {page==="compare" && <CompareStudio selectedPhones={compareSelection} onTogglePhone={toggleComparePhone} dark={dark} onClose={()=>setPage("home")} isModal={false}/>}
+      {mediaPhone && <PhoneMediaModal phone={mediaPhone} dark={dark} onClose={() => setMediaPhone(null)} />}
     </div>
   );
 }
