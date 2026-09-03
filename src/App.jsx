@@ -918,7 +918,7 @@ function PhoneMediaModal({ phone, dark, onClose }) {
             <iframe 
               width="100%" 
               height="100%" 
-              src={\`https://www.youtube.com/embed?listType=search&list=\${encodeURIComponent(phone.brand + ' ' + phone.name + ' review trailer')}\`} 
+              src={`https://www.youtube.com/embed?listType=search&list=${encodeURIComponent(phone.brand + ' ' + phone.name + ' review trailer')}`} 
               frameBorder="0" 
               allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" 
               allowFullScreen>
@@ -937,7 +937,7 @@ function PhoneMediaModal({ phone, dark, onClose }) {
           ) : images.length > 0 ? (
             <div style={{display:"grid",gridTemplateColumns:"repeat(auto-fit,minmax(180px,1fr))",gap:12}}>
               {images.map((img, i) => (
-                <a key={i} href={img.link} target="_blank" rel="noopener noreferrer" style={{display:"block",borderRadius:12,overflow:"hidden",border:\`1px solid \${brd}\`}}>
+                <a key={i} href={img.link} target="_blank" rel="noopener noreferrer" style={{display:"block",borderRadius:12,overflow:"hidden",border:`1px solid ${brd}`}}>
                   <img src={img.link} alt={img.title} style={{width:"100%",height:160,objectFit:"cover",display:"block"}} onError={(e) => { e.target.src = img.thumbnail; }}/>
                 </a>
               ))}
